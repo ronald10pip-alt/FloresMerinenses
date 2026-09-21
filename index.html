@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#E8F3FA">
+<meta name="color-scheme" content="light">
+<title>Haz florecer tu momento</title>
+
+<style>
+/* =====================================================================
+   HAZ FLORECER TU MOMENTO
+   Paleta: celeste muy suave · crema · dorado · verde natural · negro cálido
+   Tipografía: serif del sistema (emoción) + sans del sistema (interfaz)
+   ===================================================================== */
+:root{
+  --sky:#E8F3FA;
+  --cream:#FFF8E6;
+  --cream-2:#FCEFC9;
+  --gold:#E2AC2D;
+  --gold-light:#F5D774;
+  --gold-deep:#8A6210;
+  --green:#5C9250;
+  --green-deep:#3C6B33;
+  --ink:#26221B;
+  --ink-soft:#5A5346;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{
+  height:100%;margin:0;overflow:hidden;
+  background:#F4F7F0;color:var(--ink);
+  font-family:var(--sans);font-size:17px;line-height:1.5;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;
+}
+.bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(60% 40% at 50% 6%,rgba(255,226,140,.5),transparent 70%),
+    radial-gradient(80% 50% at 92% 102%,rgba(120,170,100,.14),transparent 70%),
+    linear-gradient(180deg,#E8F3FA 0%,#F4F7F0 40%,#FFF7E3 100%);
+}
+.sr-only{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:12px}
+
+/* ---------- Pantallas ---------- */
+main{position:relative;z-index:1}
+.screen{
+  position:fixed;inset:0;height:100vh;height:100dvh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:calc(64px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));
+  overflow-y:auto;overflow-x:hidden;scroll-padding-top:64px;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .45s ease,visibility 0s linear .45s;
+}
+.screen.is-active{
+  opacity:1;visibility:visible;pointer-events:auto;
+  transition:opacity .9s ease .4s,visibility 0s;
+}
+.screen__inner{
+  position:relative;z-index:0;
+  width:100%;max-width:520px;margin:auto;text-align:center;
+}
+.screen__inner--wide{max-width:680px}
+
+/* Aparición suave de los elementos de cada pantalla */
+.reveal{opacity:0;transition:opacity .9s ease}
+.screen.is-active .reveal{opacity:1;transition-delay:calc(.6s + var(--i,0) * .16s)}
+
+/* ---------- Inicio: campo de girasoles interactivo ---------- */
+.screen--meadow{touch-action:pan-y}
+.screen--welcome{-webkit-user-select:none;user-select:none}
+.meadow{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .6s ease}
+.meadow.is-on{opacity:1;transition:opacity 1.2s ease .4s}
+.meadow svg{display:block;width:100%;height:100%}
+.screen--welcome .screen__inner{z-index:1;margin:0 auto auto;padding-top:clamp(0px,3vh,32px)}
+/* Velo suave detrás del contenido para que siempre se lea, sin tapar el campo */
+.screen--meadow .screen__inner::before{
+  content:'';position:absolute;z-index:-1;inset:-5% -18% -9%;pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(255,248,230,.82) 0%,rgba(255,248,230,.6) 48%,rgba(255,248,230,0) 76%);
+}
+.screen--welcome .foot{
+  position:relative;z-index:1;padding:.3rem .95rem;border-radius:999px;
+  background:rgba(255,248,230,.86);
+}
+
+/* ---------- Tipografía ---------- */
+.emoji-big{font-size:3rem;line-height:1;margin:0 0 .6rem;animation:float 5s ease-in-out infinite alternate}
+.title{
+  font-family:var(--serif);font-weight:500;text-transform:uppercase;
+  font-size:clamp(2rem,9.5vw,3.6rem);line-height:1.12;letter-spacing:.06em;
+  margin:0 0 .4rem;
+}
+.h2{
+  font-family:var(--serif);font-weight:500;
+  font-size:clamp(1.55rem,6.6vw,2.3rem);line-height:1.22;margin:0 0 1.3rem;
+  overflow-wrap:anywhere;
+}
+.h2:focus,.title:focus{outline:none}
+.subtitle{
+  font-family:var(--serif);font-size:clamp(1.1rem,4.5vw,1.35rem);line-height:1.6;
+  max-width:30ch;margin:0 auto 1rem;
+}
+.whisper{font-family:var(--serif);font-style:italic;color:var(--ink-soft);margin:0 0 2.2rem}
+.lead{font-family:var(--serif);font-size:clamp(1.15rem,4.8vw,1.4rem);color:var(--ink-soft);margin:0 0 2rem}
+.eyebrow{font-family:var(--serif);font-style:italic;color:var(--gold-deep);margin:0 0 .5rem;overflow-wrap:anywhere}
+.rule{width:76px;height:1px;margin:1.3rem auto;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.hint{font-size:.95rem;color:var(--ink-soft);margin:.55rem 0 0}
+/* Aviso del inicio: en negrita, oscuro y sobre un fondo crema para que destaque entre los girasoles */
+.hint--strong{
+  display:inline-block;max-width:100%;margin:1.1rem auto 0;padding:.6rem 1.1rem;
+  font-size:1.05rem;font-weight:800;line-height:1.4;color:var(--ink);
+  background:rgba(255,248,230,.94);border:1.5px solid var(--gold);border-radius:18px;
+  box-shadow:0 8px 20px -12px rgba(138,98,16,.6);
+}
+.error{color:#A83A26;min-height:1.5em;font-size:.95rem;margin:.5rem 0 .3rem}
+.foot{
+  flex:none;margin:1rem 0 0;font-size:.82rem;letter-spacing:.04em;color:var(--ink-soft);
+  transition:opacity 1.2s ease 1.6s;
+}
+.halo{
+  position:absolute;left:50%;top:32%;width:min(96vw,560px);aspect-ratio:1;
+  transform:translate(-50%,-50%);z-index:-1;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,222,130,.6),rgba(255,222,130,0) 65%);
+  animation:halo 8s ease-in-out infinite alternate;
+}
+
+/* ---------- Botones ---------- */
+.btn{
+  font-family:var(--sans);font-size:1rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  min-height:56px;padding:0 2rem;border-radius:999px;border:0;cursor:pointer;color:var(--ink);
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  transition:transform .25s ease,box-shadow .25s ease,opacity .25s ease;
+}
+.btn:focus-visible{border-radius:999px}
+.btn--primary{
+  background:linear-gradient(180deg,#F8D766,#E3AC2C);
+  box-shadow:0 12px 26px -12px rgba(170,115,5,.75),inset 0 1px 0 rgba(255,255,255,.65);
+}
+.btn--primary:hover{transform:translateY(-2px);box-shadow:0 16px 30px -12px rgba(170,115,5,.85),inset 0 1px 0 rgba(255,255,255,.65)}
+.btn--primary:active{transform:scale(.98)}
+.btn[disabled]{opacity:.42;cursor:not-allowed;box-shadow:none;transform:none}
+.btn--wide{width:100%;max-width:360px}
+.btn--ghost{
+  background:transparent;color:var(--ink-soft);font-weight:600;letter-spacing:.04em;text-transform:none;
+  min-height:48px;text-decoration:underline;text-underline-offset:4px;
+}
+.link-back{
+  margin:1.4rem auto 0;display:block;background:none;border:0;cursor:pointer;
+  font:inherit;font-size:.95rem;color:var(--ink-soft);min-height:44px;padding:0 1rem;
+}
+.link-back:hover{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+
+/* ---------- Campos ---------- */
+.field{
+  width:100%;font:inherit;font-size:1.15rem;color:var(--ink);text-align:center;
+  background:rgba(255,255,255,.88);border:1.5px solid rgba(38,34,27,.24);
+  border-radius:18px;padding:1rem 1.1rem;transition:border-color .2s,box-shadow .2s;
+}
+.field:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(226,172,45,.3)}
+.field::placeholder{color:#766e60}
+.field[aria-invalid="true"]{border-color:#B3402A}
+.field--area{text-align:left;min-height:9.5rem;resize:none;line-height:1.55;font-family:var(--serif);padding-bottom:2rem}
+.textarea-wrap{position:relative}
+.counter{position:absolute;right:1rem;bottom:.6rem;font-size:.82rem;color:var(--ink-soft)}
+.counter.is-near{color:#A83A26;font-weight:700}
+.shake{animation:shake .42s ease}
+
+/* ---------- Tarjetas de intención ---------- */
+.cards{display:grid;grid-template-columns:minmax(0,1fr);gap:.7rem;margin:0 0 1.4rem;text-align:left;border:0;padding:0;min-width:0}
+.card{position:relative;display:block}
+.card input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;z-index:2}
+.card__body{
+  display:flex;align-items:center;gap:.9rem;min-height:70px;padding:.8rem 1rem;
+  background:rgba(255,255,255,.8);border:1.5px solid rgba(38,34,27,.16);border-radius:18px;
+  transition:border-color .25s,background .25s,box-shadow .25s;
+}
+.card:hover .card__body{border-color:rgba(226,172,45,.7)}
+.card__icon{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--cream-2);font-size:1.45rem}
+.card__text{min-width:0}
+.card__title,.card__desc{overflow-wrap:anywhere}
+.card__title{display:block;font-size:.88rem;font-weight:800;letter-spacing:.12em;color:var(--ink)}
+.card__desc{display:block;font-size:1rem;color:var(--ink-soft);margin-top:.15rem;line-height:1.35}
+.card__check{
+  margin-left:auto;flex:none;width:28px;height:28px;border-radius:50%;
+  background:var(--gold);color:var(--ink);display:grid;place-items:center;font-weight:800;
+  transform:scale(0);transition:transform .35s cubic-bezier(.3,1.6,.5,1);
+}
+.card input:checked + .card__body{border-color:var(--gold);background:#FFF2C8;box-shadow:0 12px 24px -16px rgba(170,115,5,.9)}
+.card input:checked + .card__body .card__check{transform:scale(1)}
+.card input:focus-visible + .card__body{outline:3px solid var(--ink);outline-offset:3px}
+
+/* ---------- Frases sugeridas ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center;margin:.7rem 0 .6rem}
+.chip{
+  font:inherit;font-size:.98rem;min-height:46px;padding:.45rem 1rem;border-radius:999px;cursor:pointer;
+  border:1.5px solid rgba(38,34,27,.2);background:rgba(255,255,255,.82);color:var(--ink);
+  transition:background .2s,border-color .2s;
+}
+.chip:hover{border-color:var(--gold)}
+.chip[aria-pressed="true"]{background:#FFEFB8;border-color:var(--gold)}
+
+/* ---------- Escena del girasol ---------- */
+.screen--exp{
+  padding:0;overflow:hidden;align-items:stretch;justify-content:flex-start;
+}
+.sun-glow{
+  position:absolute;top:-20%;right:-24%;width:90vmin;height:90vmin;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,214,110,.62) 0%,rgba(255,214,110,0) 62%);
+  opacity:0;transition:opacity 3.2s ease;
+}
+.screen--exp.is-lit .sun-glow{opacity:1}
+.plant-wrap{
+  position:relative;flex:0 0 62%;min-height:0;width:100%;padding-top:52px;
+  pointer-events:none;              /* es solo decorativa: no debe bloquear botones */
+  transition:flex-basis 1.9s cubic-bezier(.4,0,.2,1),opacity 2s ease;
+}
+.plant-wrap svg{display:block;width:100%;height:100%;overflow:visible}
+.screen--exp.is-final .plant-wrap{flex-basis:35%}
+.screen--exp.is-dissolved .plant-wrap{opacity:0}
+.screen--exp.is-farewell .plant-wrap{flex-basis:0;padding:0;visibility:hidden}
+.screen--exp.is-farewell .plant-wrap svg{display:none}
+.caption-area{
+  flex:1 1 0;min-height:0;width:100%;max-width:600px;margin:0 auto;
+  padding:.4rem 22px calc(22px + env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;align-items:center;text-align:center;overflow-y:auto;
+  position:relative;z-index:3;      /* siempre por encima de la escena */
+}
+.screen--exp.is-farewell .caption-area{padding-top:clamp(64px,17vh,24vh)}
+.stage-label{
+  margin:0;min-height:1.6em;font-size:.95rem;letter-spacing:.06em;color:var(--green-deep);font-weight:600;
+  opacity:0;transition:opacity .7s ease;
+}
+.stage-label.is-emoji{font-size:1.9rem;letter-spacing:0;line-height:1.2}
+.caption{
+  margin:.4rem 0 0;min-height:3.4em;font-family:var(--serif);overflow-wrap:anywhere;
+  font-size:clamp(1.3rem,5.6vw,1.9rem);line-height:1.4;color:var(--ink);
+  opacity:0;transition:opacity .8s ease;
+}
+.caption.is-word{font-size:clamp(1.6rem,7.6vw,2.8rem);color:var(--gold-deep);font-style:italic;overflow-wrap:anywhere}
+.stage-label.is-in,.caption.is-in{opacity:1}
+.screen--exp.is-final .stage-label,.screen--exp.is-final .caption{display:none}
+.final-box{width:100%;transition:opacity .6s ease}
+.final-box.is-out{opacity:0}
+
+/* Líneas del momento final */
+.fl{
+  margin:.4rem 0;font-family:var(--serif);font-size:clamp(1.12rem,4.7vw,1.5rem);line-height:1.45;color:var(--ink);
+  opacity:0;transform:translateY(10px);transition:opacity 1.2s ease,transform 1.2s ease;
+}
+.fl.is-in{opacity:1;transform:none}
+.fl--emoji{font-size:2.6rem;line-height:1.1;margin-bottom:.1rem}
+.fl--emoji-sm{font-size:1.9rem}
+.fl--name{
+  font-size:clamp(1.7rem,8.4vw,2.7rem);letter-spacing:.24em;padding-left:.24em;
+  text-transform:uppercase;font-weight:600;overflow-wrap:anywhere;
+}
+.fl--lead{font-size:clamp(1.15rem,5vw,1.6rem)}
+.fl--tag{font-family:var(--sans);font-size:.98rem;color:var(--gold-deep);font-weight:600;letter-spacing:.03em}
+.fl--quote{
+  font-style:italic;font-size:clamp(1.08rem,4.5vw,1.42rem);white-space:pre-wrap;overflow-wrap:anywhere;
+  padding:.9rem .6rem;margin:.6rem 0;border-top:1px solid rgba(226,172,45,.7);border-bottom:1px solid rgba(226,172,45,.7);
+}
+.fl--small{font-family:var(--sans);font-size:.9rem;color:var(--ink-soft)}
+.fl--school{font-family:var(--sans);font-size:1rem;font-weight:600;letter-spacing:.04em;margin-top:1rem}
+.fl--motto{font-style:italic;color:var(--ink-soft)}
+.fl--hash{font-family:var(--sans);font-size:.95rem;font-weight:700;letter-spacing:.06em;color:var(--gold-deep)}
+.btn.fl{margin-top:1.4rem;font-size:1rem}
+
+/* Despedida: mismo campo de girasoles y un velo suave para que el texto se lea */
+.screen--exp::after{
+  content:'';position:absolute;z-index:2;left:50%;top:calc(clamp(64px,17vh,24vh) - 70px);
+  width:min(110%,720px);height:430px;transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(255,248,230,.82) 0%,rgba(255,248,230,.6) 48%,rgba(255,248,230,0) 76%);
+  opacity:0;transition:opacity 1.6s ease;
+}
+.screen--exp.is-farewell::after{opacity:1}
+
+/* Botón de música */
+.music{
+  position:fixed;z-index:50;top:calc(12px + env(safe-area-inset-top));right:12px;
+  display:inline-flex;align-items:center;gap:.4rem;min-height:44px;padding:0 .95rem;
+  font:inherit;font-size:.9rem;font-weight:600;color:var(--ink);cursor:pointer;
+  background:rgba(255,255,255,.82);border:1.5px solid rgba(38,34,27,.2);border-radius:999px;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  transition:background .2s,border-color .2s;
+}
+.music:hover{border-color:var(--gold)}
+.music.is-pending{animation:musicPulse 2.4s ease-in-out infinite}
+@keyframes musicPulse{0%,100%{box-shadow:0 0 0 0 rgba(226,172,45,0)}50%{box-shadow:0 0 0 7px rgba(226,172,45,.35)}}
+.music[aria-pressed="true"]{background:#FFF0BE;border-color:var(--gold)}
+.music[hidden]{display:none}
+
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:40;pointer-events:none}
+
+/* ---------- Animaciones CSS ---------- */
+@keyframes float{from{transform:translateY(0)}to{transform:translateY(-6px)}}
+@keyframes halo{from{opacity:.65;transform:translate(-50%,-50%) scale(.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1.04)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+@keyframes sway{from{transform:rotate(-1.4deg)}to{transform:rotate(1.4deg)}}
+@keyframes breathe{from{transform:scale(1)}to{transform:scale(1.04)}}
+@keyframes flutter{from{transform:rotate(-2.4deg)}to{transform:rotate(2.4deg)}}
+@keyframes bgsway{from{transform:rotate(-2.6deg)}to{transform:rotate(2.6deg)}}
+@keyframes bgnod{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+.bg-sway{animation:bgsway 6.4s ease-in-out infinite alternate}
+.bg-nod{animation:bgnod 4.2s ease-in-out infinite alternate}
+.alive .sway{animation:sway 7s ease-in-out infinite alternate}
+.alive .head-breath{animation:breathe 4.6s ease-in-out infinite alternate}
+.alive .flutter{animation:flutter 5.2s ease-in-out infinite alternate}
+
+/* ---------- Responsive ---------- */
+@media (min-width:640px){
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card:last-child{grid-column:1 / -1}
+}
+@media (orientation:landscape) and (max-height:520px){
+  .screen{padding-top:60px}
+  .screen--exp{flex-direction:row;padding-top:0}
+  .plant-wrap{flex:0 0 46%;height:100%;padding-top:8px}
+  .screen--exp.is-final .plant-wrap{flex-basis:34%}
+  /* El texto se centra sin cortarse (márgenes automáticos) y deja libre el botón de Música */
+  .caption-area{height:100%;justify-content:flex-start;padding-top:64px;padding-bottom:12px}
+  .screen--exp.is-farewell .caption-area{padding-top:64px}
+  .caption-area > :first-child{margin-top:auto}
+  .caption-area > :last-child{margin-bottom:auto}
+  .screen--exp::after{top:50%;transform:translate(-50%,-50%)}
+  .caption{font-size:clamp(1.1rem,3vw,1.5rem);min-height:0}
+  .caption.is-word{font-size:clamp(1.4rem,4vw,2.1rem)}
+  .stage-label{min-height:1.2em}
+  .stage-label.is-emoji{font-size:1.5rem}
+  .fl{font-size:clamp(1rem,2.6vw,1.25rem);margin:.25rem 0}
+  .fl--emoji{font-size:1.8rem}
+  .fl--name{font-size:clamp(1.2rem,3.6vw,1.8rem);letter-spacing:.14em;padding-left:.14em}
+  .fl--quote{font-size:clamp(.95rem,2.5vw,1.15rem);padding:.5rem .4rem;margin:.3rem 0}
+  .btn.fl{margin-top:.8rem}
+}
+
+@media (max-width:360px){
+  /* Pantallas muy angostas: el botón de música se reduce al ícono (sigue con aria-label) */
+  .music{padding:0;width:44px;justify-content:center}
+  .music #musicLabel{display:none}
+}
+@media (max-height:640px) and (orientation:portrait){
+  .plant-wrap{flex-basis:56%}
+  .screen--exp.is-final .plant-wrap{flex-basis:32%}
+  .fl--emoji{font-size:2.1rem}
+  .fl--name{font-size:clamp(1.4rem,7vw,2.2rem);letter-spacing:.16em;padding-left:.16em}
+}
+
+/* ---------- Movimiento reducido: versión calmada ---------- */
+@media (prefers-reduced-motion:reduce){
+  .emoji-big,.halo,.alive .sway,.alive .head-breath,.alive .flutter,.bg-sway,.bg-nod,.music.is-pending{animation:none}
+  .screen,.screen.is-active{transition-duration:.3s;transition-delay:0s}
+  .reveal,.screen.is-active .reveal{transition-duration:.3s;transition-delay:0s}
+  .plant-wrap{transition-duration:.4s}
+  .sun-glow{transition-duration:.6s}
+  .fl{transform:none;transition-duration:.5s}
+  .shake{animation:none}
+  .btn--primary:hover{transform:none}
+}
+</style>
+</head>
+
+<body>
+<div class="bg" aria-hidden="true"></div>
+
+<button class="music" id="musicBtn" type="button" aria-pressed="false" aria-label="Activar música">
+  <span id="musicIcon" aria-hidden="true">🔊</span><span id="musicLabel">Música</span>
+</button>
+
+<noscript>
+  <p style="position:relative;z-index:2;padding:2rem;text-align:center;font-family:Georgia,serif">
+    Esta experiencia necesita JavaScript activado para hacer florecer tu momento. 🌻
+  </p>
+</noscript>
+
+<main>
+
+  <!-- Campo de girasoles interactivo (decorativo): se ve en el inicio y en la despedida -->
+  <div class="meadow" id="meadow" aria-hidden="true"><svg id="meadowSvg" preserveAspectRatio="none"></svg></div>
+
+  <!-- 1 · BIENVENIDA -->
+  <section class="screen screen--welcome screen--meadow" data-screen="welcome" aria-labelledby="welcomeTitle">
+    <div class="screen__inner">
+      <div class="halo" aria-hidden="true"></div>
+      <p class="emoji-big reveal" style="--i:0" aria-hidden="true">🌻</p>
+      <h1 class="title reveal" id="welcomeTitle" style="--i:1" tabindex="-1" data-focus>Haz florecer<br>tu momento</h1>
+      <div class="rule reveal" style="--i:2" aria-hidden="true"></div>
+      <p class="subtitle reveal" style="--i:3">“Un pequeño momento para detenerte, reconocerte y recordar todo lo que has logrado.”</p>
+      <p class="whisper reveal" style="--i:4">Porque también necesitamos regalarnos un momento.</p>
+      <button class="btn btn--primary btn--wide reveal" style="--i:5" type="button" id="btnStart">🌱 Comenzar</button>
+      <p class="hint hint--strong reveal" style="--i:6">Mueve o toca los girasoles… y siembra uno nuevo en el campo.</p>
+    </div>
+    <p class="foot">I.E. N.° 00499 “Alfonso Merino Silva”</p>
+  </section>
+
+  <!-- 2 · NOMBRE -->
+  <section class="screen screen--meadow" data-screen="name" aria-labelledby="nameTitle">
+    <div class="screen__inner">
+      <h2 class="h2 reveal" id="nameTitle" style="--i:0" tabindex="-1">Primero, dime tu nombre.</h2>
+      <form id="nameForm" class="reveal" style="--i:1" novalidate>
+        <label class="sr-only" for="nameInput">Tu nombre</label>
+        <input id="nameInput" class="field" type="text" name="nombre" maxlength="30"
+               placeholder="Escribe tu nombre" autocomplete="given-name" autocapitalize="words"
+               enterkeyhint="next" aria-describedby="nameError" data-focus>
+        <p class="error" id="nameError" role="alert"></p>
+        <button class="btn btn--primary btn--wide" type="submit">Continuar →</button>
+      </form>
+      <button class="link-back reveal" style="--i:2" type="button" data-back="welcome">← Atrás</button>
+    </div>
+  </section>
+
+  <!-- 3 · INTENCIÓN -->
+  <section class="screen screen--meadow" data-screen="intent" aria-labelledby="intentTitle">
+    <div class="screen__inner screen__inner--wide">
+      <h2 class="h2 reveal" id="intentTitle" style="--i:0" tabindex="-1" data-focus><span data-name></span>, ¿qué quieres regalarte hoy?</h2>
+      <fieldset class="cards reveal" style="--i:1" id="intentGroup" role="radiogroup" aria-labelledby="intentTitle"></fieldset>
+      <button class="btn btn--primary btn--wide reveal" style="--i:2" type="button" id="btnIntent" disabled>Continuar →</button>
+      <p class="hint reveal" style="--i:2" id="intentHint">Elige una opción para continuar.</p>
+      <button class="link-back reveal" style="--i:3" type="button" data-back="name">← Atrás</button>
+    </div>
+  </section>
+
+  <!-- 4 · MENSAJE PERSONAL -->
+  <section class="screen screen--meadow" data-screen="message" aria-labelledby="msgTitle">
+    <div class="screen__inner">
+      <p class="eyebrow reveal" style="--i:0"><span data-name></span>, este momento es para ti.</p>
+      <h2 class="h2 reveal" id="msgTitle" style="--i:1" tabindex="-1" data-focus>Ahora escribe unas palabras para ti.</h2>
+      <div class="textarea-wrap reveal" style="--i:2">
+        <label class="sr-only" for="msgInput">Hoy quiero recordar que…</label>
+        <textarea id="msgInput" class="field field--area" maxlength="250" rows="5"
+                  placeholder="Hoy quiero recordar que…" aria-describedby="msgCount msgError"></textarea>
+        <span class="counter" id="msgCount">0/250</span>
+      </div>
+      <p class="hint reveal" style="--i:3">O elige una frase para empezar; después puedes editarla.</p>
+      <div class="chips reveal" style="--i:3" id="chips"></div>
+      <p class="error" id="msgError" role="alert"></p>
+      <button class="btn btn--primary btn--wide reveal" style="--i:4" type="button" id="btnMsg">Continuar →</button>
+      <button class="link-back reveal" style="--i:5" type="button" data-back="intent">← Atrás</button>
+    </div>
+  </section>
+
+  <!-- 5 · PREPARACIÓN -->
+  <section class="screen screen--meadow" data-screen="ready" aria-labelledby="readyTitle">
+    <div class="screen__inner">
+      <div class="halo" aria-hidden="true"></div>
+      <h2 class="h2 reveal" id="readyTitle" style="--i:0" tabindex="-1" data-focus><span data-name></span>, ya está todo listo.</h2>
+      <p class="lead reveal" style="--i:1">Ahora vamos a hacer florecer tu momento.</p>
+      <button class="btn btn--primary btn--wide reveal" style="--i:2" type="button" id="btnBloom">🌱 Hacer florecer</button>
+    </div>
+  </section>
+
+  <!-- 6 · EXPERIENCIA DEL GIRASOL + MOMENTO FINAL + CIERRE -->
+  <section class="screen screen--exp" id="experience" data-screen="experience" aria-label="Tu girasol floreciendo">
+    <div class="sun-glow" aria-hidden="true"></div>
+    <div class="plant-wrap">
+      <svg id="plantSvg" viewBox="0 0 400 548" preserveAspectRatio="xMidYMax meet" role="img" aria-label="Una semilla a punto de germinar"></svg>
+    </div>
+    <div class="caption-area">
+      <p class="stage-label" id="stageLabel" aria-hidden="true"></p>
+      <p class="caption" id="caption" aria-live="polite"></p>
+      <div class="final-box" id="finalBox" aria-live="polite"></div>
+    </div>
+  </section>
+
+</main>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<script>
+'use strict';
+(() => {
+
+/* =====================================================================
+   1 · UTILIDADES
+   ===================================================================== */
+const $  = (sel, root = document) => root.querySelector(sel);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+const isReduced   = () => motionQuery.matches;
+
+const wait  = ms => new Promise(res => setTimeout(res, ms));
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const rand  = (a, b) => a + Math.random() * (b - a);
+const dur   = ms => (isReduced() ? Math.min(ms, 450) : ms);
+
+/** Crea un elemento HTML con clase y texto (siempre textContent: nunca innerHTML con datos del usuario). */
+function h(tag, className, text) {
+  const n = document.createElement(tag);
+  if (className) n.className = className;
+  if (text != null) n.textContent = text;
+  return n;
+}
+
+/** Crea un elemento SVG con atributos y lo añade a su padre. */
+function svgEl(tag, attrs, parent) {
+  const n = document.createElementNS(SVG_NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+
+/**
+ * Anima un nodo con la Web Animations API y devuelve una promesa.
+ * Con "reducir movimiento": salta al estado final y solo hace un fundido suave.
+ */
+function play(node, frames, opts = {}) {
+  if (!node || typeof node.animate !== 'function') return Promise.resolve();
+  const { duration = 800, delay = 0, easing = 'cubic-bezier(.22,.8,.3,1)' } = opts;
+
+  if (isReduced()) {
+    const first = frames[0], last = frames[frames.length - 1];
+    Object.keys(last).forEach(k => {
+      if (k !== 'opacity' && k !== 'offset' && k !== 'easing') node.style[k] = last[k];
+    });
+    if (last.opacity === undefined) return Promise.resolve();
+    const from = first.opacity !== undefined ? first.opacity : 1;
+    const a = node.animate([{ opacity: from }, { opacity: last.opacity }], { duration: 450, fill: 'both', easing: 'ease' });
+    return a.finished.catch(() => {});
+  }
+  const a = node.animate(frames, { duration, delay, easing, fill: 'both' });
+  return a.finished.catch(() => {});
+}
+
+/** Añade un degradado (lineal o radial) a <defs>. */
+function addGradient(defs, kind, id, attrs, stops) {
+  const g = svgEl(kind, Object.assign({ id }, attrs), defs);
+  stops.forEach(([o, c, a = 1]) => svgEl('stop', { offset: o, 'stop-color': c, 'stop-opacity': a }, g));
+}
+
+/**
+ * Define UNA cabeza de girasol reutilizable (se dibuja con <use>): 28 pétalos en dos capas + centro.
+ * La comparten el campo del inicio y el campo de fondo de la escena. Radio total ≈ 94 unidades.
+ */
+function defineHead(defs, id, fills) {
+  const head = svgEl('g', { id }, defs);
+  const N = 14;
+  [[fills.back, 0, 'M0 0 C -14 -14 -17 -46 0 -70 C 17 -46 14 -14 0 0 Z'],
+   [fills.front, 180 / N, 'M0 0 C -12 -12 -15 -40 0 -60 C 15 -40 12 -12 0 0 Z']].forEach(([fill, off, d]) => {
+    for (let i = 0; i < N; i++) {
+      svgEl('path', {
+        d, fill: `url(#${fill})`, stroke: 'rgba(150,90,0,.25)', 'stroke-width': .6,
+        transform: `rotate(${((i * 360) / N + off).toFixed(2)}) translate(0 -24)`
+      }, head);
+    }
+  });
+  svgEl('circle', { r: 38, fill: '#D69A18' }, head);
+  svgEl('circle', { r: 33, fill: `url(#${fills.disc})` }, head);
+  svgEl('circle', { r: 20, fill: 'none', stroke: '#E8B84A', 'stroke-opacity': .38, 'stroke-width': 13, 'stroke-dasharray': '1.7 3.3' }, head);
+  return head;
+}
+
+/* =====================================================================
+   2 · DATOS DE LA APLICACIÓN (estado + contenidos)
+   ===================================================================== */
+const State = {
+  name: '',
+  intent: null,      // id de la intención elegida
+  message: '',
+  closing: false
+};
+
+const INTENTS = [
+  { id: 'gratitud',       icon: '💛', title: 'GRATITUD',       gift: 'gratitud',
+    desc: 'Reconocer todo lo bueno que tengo.',
+    msg: n => `${n}, hoy es un buen momento para reconocer todo aquello que tienes y todo lo que has construido.` },
+  { id: 'animo',          icon: '🌱', title: 'ÁNIMO',          gift: 'ánimo',
+    desc: 'Recordarme que puedo seguir adelante.',
+    msg: n => `${n}, recuerda que no todos los días tienen que ser perfectos para seguir avanzando.` },
+  { id: 'companerismo',   icon: '🤝', title: 'COMPAÑERISMO',   gift: 'compañerismo',
+    desc: 'Valorar a quienes caminan conmigo.',
+    msg: n => `${n}, crecer también significa valorar a quienes comparten contigo el camino.` },
+  { id: 'reconocimiento', icon: '⭐', title: 'RECONOCIMIENTO', gift: 'reconocimiento',
+    desc: 'Reconocer mi esfuerzo y dedicación.',
+    msg: n => `${n}, tu esfuerzo cotidiano también merece ser reconocido.` },
+  { id: 'alegria',        icon: '😊', title: 'ALEGRÍA',        gift: 'alegría',
+    desc: 'Regalarme un momento para sonreír.',
+    msg: n => `${n}, también está bien detenerse un momento simplemente para sonreír.` }
+];
+
+const SUGGESTIONS = [
+  'Estoy haciendo lo mejor que puedo.',
+  'Cada día aprendo algo nuevo.',
+  'Mi esfuerzo también merece ser reconocido.',
+  'Todavía tengo mucho por florecer.'
+];
+
+const PETAL_WORDS = ['Gratitud.', 'Esfuerzo.', 'Aprendizaje.', 'Amistad.', 'Compañerismo.', 'Esperanza.', 'Superación.'];
+const MAX_MESSAGE = 250;
+
+const findIntent = id => INTENTS.find(i => i.id === id);
+
+/* =====================================================================
+   3 · NAVEGACIÓN ENTRE PANTALLAS
+   ===================================================================== */
+const Nav = {
+  current: null,
+
+  go(id) {
+    const next = $(`[data-screen="${id}"]`);
+    if (!next || next === this.current) return;
+    if (this.current) this.current.classList.remove('is-active');
+    next.classList.add('is-active');
+    next.scrollTop = 0;
+    this.current = next;
+    Meadow.setActive(Meadow.SCREENS.includes(id));   // el campo solo trabaja cuando se ve
+
+    // Lleva el foco al elemento principal (accesibilidad con teclado / lector de pantalla)
+    const target = $('[data-focus]', next);
+    if (target) setTimeout(() => target.focus({ preventScroll: true }), 700);
+  }
+};
+
+/** Escribe el nombre del usuario en todos los lugares marcados con [data-name]. */
+function paintName() {
+  $$('[data-name]').forEach(n => { n.textContent = State.name; });
+}
+
+/* =====================================================================
+   4 · FORMULARIOS: nombre, intención, mensaje
+   ===================================================================== */
+function cleanName(raw) {
+  let n = raw.replace(/\s+/g, ' ').trim();
+  // Si viene todo en minúsculas o mayúsculas, lo presentamos con formato de nombre propio
+  if (n && (n === n.toLowerCase() || n === n.toUpperCase())) {
+    n = n.toLowerCase().replace(/(^|[\s\-'’])(\p{L})/gu, (m, sep, ch) => sep + ch.toUpperCase());
+  }
+  return n;
+}
+
+function showError(input, box, text) {
+  box.textContent = text;
+  input.setAttribute('aria-invalid', 'true');
+  input.classList.remove('shake');
+  void input.offsetWidth;
+  input.classList.add('shake');
+  input.focus({ preventScroll: true });
+}
+function clearError(input, box) {
+  box.textContent = '';
+  input.removeAttribute('aria-invalid');
+}
+
+const Forms = {
+  init() {
+    this.initName();
+    this.initIntent();
+    this.initMessage();
+    $$('[data-back]').forEach(b => b.addEventListener('click', () => Nav.go(b.dataset.back)));
+    $('#btnStart').addEventListener('click', () => { Nav.go('name'); Music.autoStart(); });
+    $('#btnBloom').addEventListener('click', e => {
+      e.currentTarget.disabled = true;
+      Nav.go('experience');
+      Story.run();
+    });
+  },
+
+  /* --- Nombre --- */
+  initName() {
+    const form = $('#nameForm'), input = $('#nameInput'), err = $('#nameError');
+    input.addEventListener('input', () => clearError(input, err));
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = cleanName(input.value);
+      if (!name || !/\p{L}/u.test(name)) {
+        showError(input, err, 'Escribe tu nombre para continuar.');
+        return;
+      }
+      State.name = name;
+      input.value = name;
+      paintName();
+      Nav.go('intent');
+    });
+  },
+
+  /* --- Intención: tarjetas de selección única (radios nativos, accesibles con teclado) --- */
+  initIntent() {
+    const group = $('#intentGroup');
+    const btn = $('#btnIntent'), hint = $('#intentHint');
+    INTENTS.forEach(it => {
+      const label = h('label', 'card');
+      const input = h('input');
+      input.type = 'radio'; input.name = 'intent'; input.value = it.id;
+      const body  = h('span', 'card__body');
+      const icon  = h('span', 'card__icon', it.icon); icon.setAttribute('aria-hidden', 'true');
+      const text  = h('span', 'card__text');
+      text.append(h('span', 'card__title', it.title), h('span', 'card__desc', it.desc));
+      const check = h('span', 'card__check', '✓'); check.setAttribute('aria-hidden', 'true');
+      body.append(icon, text, check);
+      label.append(input, body);
+      group.append(label);
+      input.addEventListener('change', () => {
+        State.intent = it.id;
+        btn.disabled = false;
+        hint.textContent = '';
+      });
+    });
+    btn.addEventListener('click', () => { if (State.intent) Nav.go('message'); });
+  },
+
+  /* --- Mensaje personal --- */
+  initMessage() {
+    const area = $('#msgInput'), counter = $('#msgCount'), err = $('#msgError'), chipBox = $('#chips');
+
+    const refresh = () => {
+      counter.textContent = `${area.value.length}/${MAX_MESSAGE}`;
+      counter.classList.toggle('is-near', area.value.length >= MAX_MESSAGE - 20);
+      $$('.chip', chipBox).forEach(c => c.setAttribute('aria-pressed', String(area.value === c.dataset.text)));
+    };
+
+    SUGGESTIONS.forEach(text => {
+      const chip = h('button', 'chip', text);
+      chip.type = 'button';
+      chip.dataset.text = text;
+      chip.setAttribute('aria-pressed', 'false');
+      chip.addEventListener('click', () => {
+        const current = area.value.trim();
+        const isSuggestion = SUGGESTIONS.includes(current);
+        // Si está vacío (o solo tiene otra sugerencia) la reemplaza; si no, la añade al final
+        area.value = (!current || isSuggestion) ? text : `${current} ${text}`.slice(0, MAX_MESSAGE);
+        clearError(area, err);
+        refresh();
+        area.focus({ preventScroll: true });
+        area.setSelectionRange(area.value.length, area.value.length);
+      });
+      chipBox.append(chip);
+    });
+
+    area.addEventListener('input', () => { clearError(area, err); refresh(); });
+
+    $('#btnMsg').addEventListener('click', () => {
+      const msg = area.value.trim();
+      if (msg.length < 3) {
+        showError(area, err, 'Escribe unas palabras (o elige una frase) para continuar.');
+        return;
+      }
+      State.message = msg.slice(0, MAX_MESSAGE);
+      Nav.go('ready');
+    });
+    refresh();
+  },
+
+  /** Limpia todos los campos para poder vivir un nuevo momento. */
+  reset() {
+    State.name = ''; State.intent = null; State.message = ''; State.closing = false;
+    $('#nameInput').value = '';
+    $('#msgInput').value = '';
+    $('#msgInput').dispatchEvent(new Event('input'));
+    $$('input[name="intent"]').forEach(r => { r.checked = false; });
+    $('#btnIntent').disabled = true;
+    $('#intentHint').textContent = 'Elige una opción para continuar.';
+    $('#btnBloom').disabled = false;
+    $$('.error').forEach(e => { e.textContent = ''; });
+    paintName();
+  }
+};
+
+/* =====================================================================
+   5 · EFECTOS: partículas doradas, destellos y pétalos (canvas)
+   ===================================================================== */
+const Fx = {
+  cv: null, cx: null, w: 0, h: 0, dpr: 1,
+  parts: [], sprite: null, last: 0, glowTimer: null,
+
+  init() {
+    this.cv = $('#fx');
+    this.cx = this.cv.getContext('2d');
+    if (!this.cx) return;
+    this.makeSprite();
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+    // Polvo dorado ambiente ya distribuido por la pantalla
+    if (!isReduced()) for (let i = 0; i < this.motesTarget(); i++) this.addMote(true);
+    requestAnimationFrame(t => this.loop(t));
+  },
+
+  makeSprite() {
+    const s = 64, c = document.createElement('canvas');
+    c.width = c.height = s;
+    const g = c.getContext('2d');
+    if (!g) return;
+    const gr = g.createRadialGradient(s / 2, s / 2, 0, s / 2, s / 2, s / 2);
+    gr.addColorStop(0,   'rgba(255,246,208,1)');
+    gr.addColorStop(.28, 'rgba(255,222,120,.85)');
+    gr.addColorStop(1,   'rgba(255,200,70,0)');
+    g.fillStyle = gr;
+    g.fillRect(0, 0, s, s);
+    this.sprite = c;
+  },
+
+  resize() {
+    this.dpr = Math.min(2, window.devicePixelRatio || 1);
+    this.w = window.innerWidth; this.h = window.innerHeight;
+    this.cv.width = Math.round(this.w * this.dpr);
+    this.cv.height = Math.round(this.h * this.dpr);
+    this.cx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+  },
+
+  motesTarget() { return clamp(Math.round((this.w * this.h) / 48000), 8, 20); },
+  add(p) { if (this.parts.length < 240) this.parts.push(p); },
+
+  addMote(anywhere) {
+    this.add({
+      type: 'mote', x: rand(0, this.w), y: anywhere ? rand(0, this.h) : this.h + 10,
+      vx: rand(-6, 6), vy: rand(-14, -5), age: anywhere ? rand(0, 6) : 0,
+      life: rand(10, 17), size: rand(6, 11), ph: rand(0, 6.28)
+    });
+  },
+
+  /** Destellos dorados en un punto de la pantalla. */
+  sparks(x, y, n = 6, spread = 24) {
+    if (isReduced()) return;
+    for (let i = 0; i < n; i++) {
+      this.add({
+        type: 'spark', x: x + rand(-spread, spread), y: y + rand(-spread, spread),
+        vx: rand(-14, 14), vy: rand(-36, -8), age: 0, life: rand(1.1, 2.3), size: rand(8, 16)
+      });
+    }
+  },
+
+  /** Un pétalo dorado que cae flotando. */
+  petalFall(x, y) {
+    if (isReduced()) return;
+    this.add({
+      type: 'petal', x, y, vx: rand(-16, 16), vy: rand(12, 30), age: 0, life: rand(4, 6.5),
+      size: rand(7, 11), rot: rand(0, 6.28), vr: rand(-1.4, 1.4), ph: rand(0, 6.28), hue: rand(38, 46)
+    });
+  },
+
+  center(el) {
+    const r = el.getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width, h: r.height };
+  },
+  atEl(el, n, spread) { if (!el) return; const c = this.center(el); this.sparks(c.x, c.y, n, spread); },
+
+  /** Anillo de destellos alrededor de un elemento (al completarse el girasol). */
+  ring(el, n = 28) {
+    if (!el || isReduced()) return;
+    const c = this.center(el), rad = Math.min(c.w, c.h) / 2;
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2 + rand(-.1, .1), rr = rad * rand(.82, 1.05);
+      this.add({
+        type: 'spark', x: c.x + Math.cos(a) * rr, y: c.y + Math.sin(a) * rr,
+        vx: Math.cos(a) * 18, vy: Math.sin(a) * 18 - 8, age: -rand(0, .5), life: rand(1.4, 2.6), size: rand(9, 17)
+      });
+    }
+  },
+
+  /** Destellos y pétalos ocasionales alrededor del girasol terminado (muy sutil). */
+  startGlow() {
+    this.stopGlow();
+    if (isReduced()) return;
+    this.glowTimer = setInterval(() => {
+      const P = Plant.p;
+      if (!P) return;
+      const pool = P.petals.front.concat(P.petals.back);
+      const el = pool[Math.floor(Math.random() * pool.length)];
+      this.atEl(el, 2, 10);
+      if (Math.random() < .3) { const c = this.center(el); this.petalFall(c.x, c.y); }
+    }, 560);
+  },
+  stopGlow() { clearInterval(this.glowTimer); this.glowTimer = null; },
+  clear() { this.parts.length = 0; },
+
+  loop(now) {
+    const dt = Math.min(.05, (now - this.last) / 1000 || .016);
+    this.last = now;
+    const cx = this.cx;
+    cx.clearRect(0, 0, this.w, this.h);
+
+    // Reponer polvo ambiente
+    if (!isReduced()) {
+      let motes = 0;
+      for (const p of this.parts) if (p.type === 'mote') motes++;
+      if (motes < this.motesTarget() && Math.random() < .06) this.addMote(false);
+    }
+
+    for (let i = this.parts.length - 1; i >= 0; i--) {
+      const p = this.parts[i];
+      p.age += dt;
+      if (p.age < 0) continue;
+      if (p.age >= p.life) { this.parts.splice(i, 1); continue; }
+      const k = p.age / p.life;
+
+      if (p.type === 'petal') {
+        p.ph += dt * 1.6;
+        p.x += (p.vx + Math.sin(p.ph) * 22) * dt;
+        p.y += p.vy * dt;
+        p.rot += p.vr * dt;
+        const a = Math.min(1, p.age / .4) * (k > .75 ? (1 - k) / .25 : 1);
+        cx.save();
+        cx.translate(p.x, p.y); cx.rotate(p.rot);
+        cx.fillStyle = `hsla(${p.hue},92%,58%,${(a * .9).toFixed(3)})`;
+        const s = p.size;
+        cx.beginPath();
+        cx.moveTo(0, 0);
+        cx.bezierCurveTo(-s * .5, -s * .4, -s * .55, -s * 1.2, 0, -s * 1.6);
+        cx.bezierCurveTo(s * .55, -s * 1.2, s * .5, -s * .4, 0, 0);
+        cx.fill();
+        cx.restore();
+      } else {
+        if (p.type === 'mote') { p.ph += dt * .8; p.x += (p.vx + Math.sin(p.ph) * 8) * dt; }
+        else { p.x += p.vx * dt; p.vx *= .985; }
+        p.y += p.vy * dt;
+        const a = Math.sin(Math.PI * k) * (p.type === 'mote' ? .42 : .95);
+        if (this.sprite) {
+          cx.globalAlpha = a;
+          cx.drawImage(this.sprite, p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
+        }
+      }
+    }
+    cx.globalAlpha = 1;
+    requestAnimationFrame(t => this.loop(t));
+  }
+};
+
+/* =====================================================================
+   6 · MÚSICA: melodía original, alegre y cariñosa, generada con Web Audio
+   (sin archivos externos). Solo suena cuando la persona pulsa el botón.
+   Progresión romántica en Do mayor: C – G – Am – Em – F – C – F – G
+   ===================================================================== */
+const Music = {
+  ctx: null, bus: null, master: null, noise: null,
+  on: false, muted: false, ready: false, starting: false, gestureArmed: false, timer: null, step: 0, nextTime: 0,
+  BPM: 100,
+  ARP: [0, 1, 2, 1, 0, 1, 2, 1],                 // patrón del arpegio (notas de la armonía por corchea)
+
+  // Cada compás: bajo, notas del arpegio, colchón (pad) y melodía [posición, nota MIDI, duración en corcheas]
+  BARS: [
+    { bass: 48, arp: [55, 60, 64], pad: [60, 64, 67], mel: [[0, 76, 2], [2, 79, 2], [4, 76, 1], [5, 74, 1], [6, 72, 2]] },   // C
+    { bass: 43, arp: [50, 55, 59], pad: [59, 62, 67], mel: [[0, 71, 2], [2, 74, 2], [4, 71, 1], [5, 69, 1], [6, 67, 2]] },   // G
+    { bass: 45, arp: [52, 57, 60], pad: [57, 60, 64], mel: [[0, 72, 2], [2, 76, 2], [4, 72, 1], [5, 71, 1], [6, 69, 2]] },   // Am
+    { bass: 40, arp: [47, 52, 55], pad: [59, 64, 67], mel: [[0, 76, 2], [2, 79, 2], [4, 76, 1], [5, 74, 1], [6, 71, 2]] },   // Em
+    { bass: 41, arp: [48, 53, 57], pad: [60, 65, 69], mel: [[0, 77, 2], [2, 81, 2], [4, 77, 1], [5, 76, 1], [6, 72, 2]] },   // F
+    { bass: 48, arp: [55, 60, 64], pad: [60, 64, 67], mel: [[0, 76, 2], [2, 79, 2], [4, 76, 2], [6, 72, 2]] },               // C
+    { bass: 41, arp: [48, 53, 57], pad: [60, 65, 69], mel: [[0, 77, 2], [2, 76, 1], [3, 74, 1], [4, 72, 2], [6, 69, 2]] },   // F
+    { bass: 43, arp: [50, 55, 59], pad: [59, 62, 67], mel: [[0, 74, 2], [2, 71, 1], [3, 74, 1], [4, 79, 4]] }                // G
+  ],
+
+  eighth() { return 60 / this.BPM / 2; },
+  mtof(m) { return 440 * Math.pow(2, (m - 69) / 12); },
+  supported() { return !!(window.AudioContext || window.webkitAudioContext); },
+
+  init() {
+    if (this.ready) return true;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      const ctx = this.ctx = new AC();
+      const master = this.master = ctx.createGain();
+      master.gain.value = 0.0001;
+      master.connect(ctx.destination);
+
+      const tone = ctx.createBiquadFilter();
+      tone.type = 'lowpass'; tone.frequency.value = 4200;
+      const bus = this.bus = ctx.createGain();
+      bus.gain.value = 0.9;
+      bus.connect(tone);
+
+      // Sonido directo + eco rítmico suave (negra con puntillo) que da brillo y espacio
+      const dry = ctx.createGain(); dry.gain.value = 0.8;
+      tone.connect(dry); dry.connect(master);
+      const delay = ctx.createDelay(1); delay.delayTime.value = this.eighth() * 3;
+      const fb = ctx.createGain(); fb.gain.value = 0.32;
+      const damp = ctx.createBiquadFilter(); damp.type = 'lowpass'; damp.frequency.value = 2200;
+      const wet = ctx.createGain(); wet.gain.value = 0.4;
+      tone.connect(delay); delay.connect(damp); damp.connect(fb); fb.connect(delay);
+      damp.connect(wet); wet.connect(master);
+
+      // Ruido corto para un "shaker" muy suave
+      const len = Math.floor(ctx.sampleRate * 0.2);
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+      this.noise = buf;
+
+      this.ready = true;
+      return true;
+    } catch (e) {
+      console.warn('Audio no disponible', e);
+      return false;
+    }
+  },
+
+  /* --- Voces --- */
+  pluck(freq, t, vol = 0.05) {                       // arpegio: pulsado suave
+    const ctx = this.ctx, o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'triangle'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.7);
+    o.connect(g); g.connect(this.bus);
+    o.start(t); o.stop(t + 0.75);
+  },
+
+  bass(freq, t, vol = 0.1) {
+    const ctx = this.ctx, o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 1.3);
+    o.connect(g); g.connect(this.bus);
+    o.start(t); o.stop(t + 1.35);
+  },
+
+  lead(freq, t, len, vol = 0.075) {                  // melodía: voz cálida con vibrato leve
+    const ctx = this.ctx, hold = len * this.eighth();
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + 0.025);
+    g.gain.exponentialRampToValueAtTime(vol * 0.55, t + hold);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + hold + 0.45);
+    g.connect(this.bus);
+    const lfo = ctx.createOscillator(), lfoGain = ctx.createGain();
+    lfo.frequency.value = 5.2; lfoGain.gain.value = 4;          // ±4 centésimas de tono
+    lfo.connect(lfoGain);
+    [['sine', 1], ['triangle', 0.35]].forEach(([type, mix]) => {
+      const o = ctx.createOscillator(), og = ctx.createGain();
+      o.type = type; o.frequency.value = freq; og.gain.value = mix;
+      lfoGain.connect(o.detune);
+      o.connect(og); og.connect(g);
+      o.start(t); o.stop(t + hold + 0.5);
+    });
+    lfo.start(t); lfo.stop(t + hold + 0.5);
+  },
+
+  pad(freq, t, bar) {                                // colchón de fondo que abraza cada compás
+    const ctx = this.ctx, o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.014, t + 0.5);
+    g.gain.linearRampToValueAtTime(0.014, t + bar - 0.1);
+    g.gain.linearRampToValueAtTime(0.0001, t + bar + 0.9);
+    o.connect(g); g.connect(this.bus);
+    o.start(t); o.stop(t + bar + 1);
+  },
+
+  shaker(t, vol = 0.014) {
+    const ctx = this.ctx, src = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), g = ctx.createGain();
+    src.buffer = this.noise;
+    hp.type = 'highpass'; hp.frequency.value = 6500;
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+    src.connect(hp); hp.connect(g); g.connect(this.bus);
+    src.start(t); src.stop(t + 0.08);
+  },
+
+  /* --- Secuenciador: programa las notas con un pequeño adelanto para que suene fluido --- */
+  scheduleStep(step, t) {
+    const bar = this.BARS[Math.floor(step / 8) % this.BARS.length], slot = step % 8;
+    if (slot === 0) {
+      bar.pad.forEach(n => this.pad(this.mtof(n - 12), t, this.eighth() * 8));
+      this.bass(this.mtof(bar.bass), t);
+    }
+    if (slot === 4) this.bass(this.mtof(bar.bass), t, 0.055);
+    this.pluck(this.mtof(bar.arp[this.ARP[slot]]), t, slot % 2 ? 0.038 : 0.05);
+    bar.mel.forEach(([pos, note, len]) => { if (pos === slot) this.lead(this.mtof(note), t, len); });
+    if (slot % 2) this.shaker(t);
+  },
+
+  tick() {
+    if (!this.on || !this.ctx) return;
+    const now = this.ctx.currentTime;
+    if (this.nextTime < now - 0.1) this.nextTime = now + 0.05;    // si la pestaña estuvo dormida, retoma sin atropellar
+    while (this.nextTime < now + 0.4) {
+      this.scheduleStep(this.step, this.nextTime);
+      this.nextTime += this.eighth();
+      this.step++;
+    }
+  },
+
+  /**
+   * Intenta arrancar la música. Devuelve true si está sonando.
+   * Si el navegador la bloquea (necesita un toque de la persona) devuelve false y nada queda a medias.
+   */
+  async start() {
+    if (this.on) return true;
+    if (this.starting) return false;
+    this.starting = true;
+    try {
+      if (!this.init()) return false;
+      // Sin toque previo algunos navegadores dejan la promesa pendiente: no esperamos más de 0,5 s
+      await Promise.race([
+        this.ctx.resume().catch(() => {}),
+        new Promise(res => setTimeout(res, 500))
+      ]);
+      if (this.ctx.state !== 'running') return false;
+      this.on = true;
+      this.step = 0;
+      this.nextTime = this.ctx.currentTime + 0.15;
+      const t = this.ctx.currentTime;
+      this.master.gain.cancelScheduledValues(t);
+      this.master.gain.setValueAtTime(Math.max(this.master.gain.value, 0.0001), t);
+      this.master.gain.linearRampToValueAtTime(0.7, t + 1.4);
+      clearInterval(this.timer);
+      this.timer = setInterval(() => this.tick(), 80);
+      this.tick();
+      this.ui();
+      return true;
+    } finally {
+      this.starting = false;
+    }
+  },
+
+  stop(fade = 0.8) {
+    this.on = false;
+    clearInterval(this.timer);
+    if (this.ctx) {
+      const t = this.ctx.currentTime;
+      this.master.gain.cancelScheduledValues(t);
+      this.master.gain.setValueAtTime(Math.max(this.master.gain.value, 0.0001), t);
+      this.master.gain.linearRampToValueAtTime(0.0001, t + fade);
+      setTimeout(() => { if (!this.on && this.ctx) this.ctx.suspend().catch(() => {}); }, fade * 1000 + 150);
+    }
+    this.ui();
+  },
+
+  /**
+   * La música debe sonar desde que se abre el aplicativo (salvo que la persona la haya silenciado).
+   * Se intenta al cargar; si el navegador la bloquea, arranca con el primer toque, clic o tecla.
+   */
+  autoStart() {
+    if (!this.supported() || this.on || this.muted) return;
+    this.start().then(ok => { if (!ok && !this.on) this.waitForGesture(); }).catch(() => this.waitForGesture());
+  },
+
+  /** Espera el primer gesto de la persona (cualquier parte de la pantalla, menos el botón de música). */
+  waitForGesture() {
+    if (this.gestureArmed || this.on || this.muted) return;
+    this.gestureArmed = true;
+    const events = ['pointerdown', 'pointerup', 'mousedown', 'touchend', 'click', 'keydown'];
+    const handler = e => {
+      if (e.target && e.target.closest && e.target.closest('#musicBtn')) return;   // ese botón decide por sí mismo
+      events.forEach(t => document.removeEventListener(t, handler, true));
+      this.gestureArmed = false;
+      this.autoStart();
+    };
+    events.forEach(t => document.addEventListener(t, handler, true));
+    this.ui();
+  },
+
+  /** El botón 🔊/🔇 recuerda la elección de la persona. */
+  toggle() {
+    if (this.on) { this.muted = true; return this.stop(); }
+    this.muted = false;
+    return this.start().then(ok => { if (!ok) this.waitForGesture(); });
+  },
+
+  ui() {
+    const btn = $('#musicBtn');
+    btn.setAttribute('aria-pressed', String(this.on));
+    btn.setAttribute('aria-label', this.on ? 'Silenciar música' : 'Activar música');
+    $('#musicIcon').textContent = this.on ? '🔇' : '🔊';
+    $('#musicLabel').textContent = this.on ? 'Silenciar' : 'Música';
+    btn.classList.toggle('is-pending', !this.on && !this.muted && this.gestureArmed);
+  },
+
+  init_ui() {
+    const btn = $('#musicBtn');
+    if (!this.supported()) { btn.hidden = true; return; }
+    btn.addEventListener('click', () => this.toggle());
+    // Si la pestaña pasa a segundo plano, pausa el audio y lo retoma al volver
+    document.addEventListener('visibilitychange', () => {
+      if (!this.on || !this.ctx) return;
+      if (document.hidden) this.ctx.suspend().catch(() => {});
+      else { this.ctx.resume().catch(() => {}); this.nextTime = this.ctx.currentTime + 0.1; }
+    });
+    this.ui();
+  }
+};
+
+/* =====================================================================
+   7 · EL GIRASOL (SVG construido por código, etapa por etapa)
+   ===================================================================== */
+const LEAF = 'M0 0 C -14 -30 -52 -58 -124 -40 C -108 -6 -60 24 0 0 Z';
+const LEAF_MIDRIB = 'M-2 -2 C -40 -14 -84 -26 -116 -38';
+const LEAF_VEINS = ['M-38 -13 L-56 -32', 'M-38 -13 L-46 4', 'M-76 -23 L-90 -38', 'M-76 -23 L-84 -10'];
+const PETAL_BACK  = 'M0 0 C -17 -18 -20 -58 0 -86 C 20 -58 17 -18 0 0 Z';
+const PETAL_FRONT = 'M0 0 C -15 -16 -18 -50 0 -76 C 18 -50 15 -16 0 0 Z';
+const PETAL_COUNT = 14;
+const PETAL_FRAMES = [
+  { opacity: 0, transform: 'scale(0)' },
+  { opacity: 1, transform: 'scale(1.08)', offset: .62 },
+  { opacity: 1, transform: 'scale(1)' }
+];
+
+const Plant = {
+  svg: null,
+  p: null,                                            // referencias a las partes animables
+  STEM: [[200, 494], [200, 410], [210, 300], [200, 150]],   // curva del tallo (Bézier cúbica)
+  COMPANIONS: [{ x: 120, h: 44, lean: -5 }, { x: 156, h: 64, lean: 4 },
+               { x: 246, h: 58, lean: -4 }, { x: 282, h: 40, lean: 5 }],
+
+  /** Altura del terreno en una posición x (montículo suave). */
+  gy(x) { return 490 + 58 * Math.pow(Math.min(1, Math.abs(x - 200) / 180), 1.6); },
+
+  bez(t) {
+    const [a, b, c, d] = this.STEM, u = 1 - t;
+    const f = i => u * u * u * a[i] + 3 * u * u * t * b[i] + 3 * u * t * t * c[i] + t * t * t * d[i];
+    return { x: f(0), y: f(1) };
+  },
+  stemAtY(y) {
+    let best = this.bez(0);
+    for (let i = 0; i <= 240; i++) {
+      const pt = this.bez(i / 240);
+      if (Math.abs(pt.y - y) < Math.abs(best.y - y)) best = pt;
+    }
+    return best;
+  },
+
+  /**
+   * Campo de girasoles de fondo. Comparte el mismo terreno y escala que el girasol protagonista;
+   * cada flor se mece (tallo) y cabecea (cabeza) con un desfase que dibuja una "ola" de viento.
+   */
+  buildField(S, defs, P) {
+    const XLINK = 'http://www.w3.org/1999/xlink';
+
+    // Una sola cabeza reutilizable (<use>): ligera aunque haya decenas de flores
+    defineHead(defs, 'bgHead', { back: 'gBgBack', front: 'gBgFront', disc: 'gBgDisc' });
+
+    P.field = svgEl('g', { style: 'opacity:0' }, S);
+
+    // Cuántas flores hacen falta para cubrir el ancho de la pantalla (incluso con el girasol reducido)
+    const r = S.getBoundingClientRect();
+    const real = (r.width && r.height) ? Math.min(r.width / 400, r.height / 548) : .5;
+    const half = (window.innerWidth / 2) / (real * .5);
+    const xMin = Math.max(-1600, 200 - half - 80), xMax = Math.min(2000, 200 + half + 80);
+
+    // Generador pseudoaleatorio con semilla: el campo siempre queda armonioso y repetible
+    let seed = 7;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+
+    const flowers = [];
+    for (let x = xMin; x <= xMax; x += 60) {            // fila cercana
+      const fx = x + (rnd() - .5) * 26;
+      if (fx > 110 && fx < 290) continue;               // el centro es del girasol protagonista
+      flowers.push({ x: fx, headY: 250 + rnd() * 110, s: .46 + rnd() * .26, a: .82, base: 524 + rnd() * 14 });
+    }
+    for (let x = xMin; x <= xMax; x += 84) {            // fila lejana: más pequeña y tenue
+      const fx = x + 30 + (rnd() - .5) * 36;
+      if (fx > 110 && fx < 290) continue;
+      flowers.push({ x: fx, headY: 205 + rnd() * 80, s: .3 + rnd() * .12, a: .5, base: 516 + rnd() * 8 });
+    }
+    flowers.sort((a, b) => a.s - b.s).slice(0, 110).forEach(f => {
+      const L = f.base - f.headY;
+      const outer = svgEl('g', { transform: `translate(${f.x.toFixed(1)} ${f.base.toFixed(1)})`, opacity: f.a }, P.field);
+      const sway = svgEl('g', { class: 'bg-sway' }, outer);
+      sway.style.animationDelay = `${(-((f.x + 1600) / 140)).toFixed(2)}s`;   // ola de viento
+      const lean = (rnd() - .5) * 16;
+      svgEl('path', {
+        d: `M0 0 C ${lean.toFixed(1)} ${(-L * .35).toFixed(1)} ${(-lean).toFixed(1)} ${(-L * .7).toFixed(1)} 0 ${(-L).toFixed(1)}`,
+        fill: 'none', stroke: '#7DA56A', 'stroke-width': (2.2 + f.s * 5).toFixed(1), 'stroke-linecap': 'round'
+      }, sway);
+      const side = rnd() < .5 ? 1 : -1, k = (f.s * .55).toFixed(2);
+      svgEl('path', {
+        d: LEAF, fill: 'url(#gLeaf)',
+        transform: `translate(0 ${(-L * .38).toFixed(1)}) rotate(${side === 1 ? -8 : 6}) scale(${side === 1 ? -k : k} ${k})`
+      }, sway);
+      const hg = svgEl('g', { transform: `translate(0 ${(-L).toFixed(1)})` }, sway);
+      const nod = svgEl('g', { class: 'bg-nod' }, hg);
+      nod.style.animationDelay = `${(-rnd() * 4).toFixed(2)}s`;
+      const use = svgEl('use', { href: '#bgHead', transform: `scale(${f.s.toFixed(2)})` }, nod);
+      use.setAttributeNS(XLINK, 'xlink:href', '#bgHead');
+    });
+
+    // Bruma verde al pie del campo: funde las bases de los tallos con el terreno
+    let d = `M${xMin - 100} 590 L${xMin - 100} 518`;
+    for (let x = xMin - 100; x <= xMax + 100; x += 40) d += ` L${x} ${(518 + 6 * Math.sin(x / 55)).toFixed(1)}`;
+    d += ` L${xMax + 100} 590 Z`;
+    svgEl('path', { d, fill: 'url(#gHaze)' }, P.field);
+  },
+
+  /** Construye todo el SVG (todo oculto al inicio). */
+  build() {
+    const S = this.svg = $('#plantSvg');
+    S.replaceChildren();
+    S.classList.remove('alive');
+    S.setAttribute('aria-label', 'Una semilla a punto de germinar');
+    const P = this.p = { leaves: [], sprouts: [], roots: [], cots: [], petals: { back: [], front: [] } };
+    const HIDDEN = 'opacity:0';
+
+    /* --- Degradados --- */
+    const defs = svgEl('defs', {}, S);
+    const grad = (kind, id, attrs, stops) => addGradient(defs, kind, id, attrs, stops);
+    grad('linearGradient', 'gPetalBack',  { x1: 0, y1: 1, x2: 0, y2: 0 }, [[0, '#D28908'], [1, '#EEB222']]);
+    grad('linearGradient', 'gPetalFront', { x1: 0, y1: 1, x2: 0, y2: 0 }, [[0, '#EFB420'], [.65, '#F8CB3D'], [1, '#FFE58C']]);
+    grad('linearGradient', 'gLeaf', { x1: 0, y1: 0, x2: -124, y2: 0, gradientUnits: 'userSpaceOnUse' }, [[0, '#70A85A'], [1, '#3E7B38']]);
+    grad('linearGradient', 'gSoil', { x1: 0, y1: 490, x2: 0, y2: 548, gradientUnits: 'userSpaceOnUse' }, [[0, '#A07549'], [.6, '#75533A'], [1, '#5B3F27', 0]]);   // el montículo se funde suavemente hacia abajo
+    grad('linearGradient', 'gBud',  { x1: 0, y1: 1, x2: 0, y2: 0 }, [[0, '#4A853F'], [1, '#8BBF63']]);
+    grad('radialGradient', 'gDisc', { cx: .5, cy: .5, r: .5 }, [[0, '#7A4B1B'], [.7, '#4C2C12'], [1, '#2B190A']]);
+    grad('linearGradient', 'gBgBack',  { x1: 0, y1: 1, x2: 0, y2: 0 }, [[0, '#DCA01A'], [1, '#EBBB3C']]);
+    grad('linearGradient', 'gBgFront', { x1: 0, y1: 1, x2: 0, y2: 0 }, [[0, '#EBBA30'], [1, '#FADB80']]);
+    grad('radialGradient', 'gBgDisc',  { cx: .5, cy: .5, r: .5 }, [[0, '#7A4E20'], [1, '#3E2711']]);
+    grad('linearGradient', 'gHaze', { x1: 0, y1: 508, x2: 0, y2: 580, gradientUnits: 'userSpaceOnUse' },
+      [[0, '#AFCB85', 0], [.3, '#AFCB85', .55], [.6, '#AFCB85', .4], [1, '#AFCB85', 0]]);
+    grad('radialGradient', 'gHalo', { cx: .5, cy: .5, r: .5 }, [[0, '#FFE9A6', .7], [1, '#FFD36A', 0]]);
+
+    /* --- Campo de girasoles al fondo, moviéndose con el viento --- */
+    this.buildField(S, defs, P);
+
+    /* --- Grupo que se mece con el viento (pivote en el suelo) --- */
+    const anchor = svgEl('g', { transform: 'translate(200 490)' }, S);
+    const sway   = svgEl('g', { class: 'sway' }, anchor);
+    const world  = svgEl('g', { transform: 'translate(-200 -490)' }, sway);
+    const flutterDelay = n => { n.style.animationDelay = `${-rand(0, 5).toFixed(2)}s`; };
+
+    /* Pequeñas plantas compañeras (compañerismo) */
+    this.COMPANIONS.forEach(c => {
+      const outer = svgEl('g', { transform: `translate(${c.x} ${(this.gy(c.x) + 3).toFixed(1)})` }, world);
+      const flut = svgEl('g', { class: 'flutter' }, outer); flutterDelay(flut);
+      const stem = svgEl('path', {
+        d: `M0 0 C 0 ${-c.h * .35} ${c.lean} ${-c.h * .7} ${c.lean} ${-c.h}`,
+        fill: 'none', stroke: '#7FAE63', 'stroke-width': 3.2, 'stroke-linecap': 'round',
+        pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1
+      }, flut);
+      const leaves = [['rotate(12) scale(.24)', 0], ['rotate(-12) scale(-.24 .24)', 1]].map(([tf]) => {
+        const o = svgEl('g', { transform: `translate(${c.lean} ${-c.h}) ${tf}` }, flut);
+        const grow = svgEl('g', { style: HIDDEN }, o);
+        svgEl('path', { d: LEAF, fill: 'url(#gLeaf)' }, grow);
+        return { grow };
+      });
+      P.sprouts.push({ stem, leaves });
+    });
+
+    /* Tallo principal */
+    const stemD = this.STEM.map((pt, i) => (i === 0 ? `M${pt[0]} ${pt[1]} C` : `${pt[0]} ${pt[1]}`)).join(' ');
+    const stemAttrs = { d: stemD, fill: 'none', 'stroke-linecap': 'round', pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1 };
+    P.stem   = svgEl('path', Object.assign({ stroke: '#5C9250', 'stroke-width': 11, style: HIDDEN }, stemAttrs), world);
+    P.stemHi = svgEl('path', Object.assign({ stroke: '#9CCB7D', 'stroke-width': 2.6, transform: 'translate(-2 0)', style: HIDDEN }, stemAttrs), world);
+
+    /* Hojas */
+    const makeLeaf = (y, tf) => {
+      const pt = this.stemAtY(y);
+      const outer = svgEl('g', { transform: `translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)}) ${tf}` }, world);
+      const flut = svgEl('g', { class: 'flutter' }, outer); flutterDelay(flut);
+      const grow = svgEl('g', { style: HIDDEN }, flut);
+      svgEl('path', { d: LEAF, fill: 'url(#gLeaf)', stroke: 'rgba(40,90,40,.35)', 'stroke-width': .8 }, grow);
+      svgEl('path', { d: LEAF_MIDRIB, fill: 'none', stroke: 'rgba(255,255,255,.4)', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, grow);
+      LEAF_VEINS.forEach(d => svgEl('path', { d, fill: 'none', stroke: 'rgba(255,255,255,.28)', 'stroke-width': 1, 'stroke-linecap': 'round' }, grow));
+      return { grow };
+    };
+    P.leaves.push(makeLeaf(404, 'rotate(6)'), makeLeaf(332, 'rotate(-8) scale(-.86 .86)'));
+
+    /* Cabeza: botón floral + flor */
+    const head = P.head = svgEl('g', { transform: 'translate(200 150)' }, world);
+
+    // Botón floral: sépalos cerrados con puntas doradas asomando
+    P.bud = svgEl('g', { style: HIDDEN }, head);
+    const sepal = deg => {
+      const g = svgEl('g', { transform: `translate(0 26) rotate(${deg})` }, P.bud);
+      svgEl('path', { d: 'M0 0 C -15 -16 -16 -46 0 -68 C 16 -46 15 -16 0 0 Z', fill: 'url(#gBud)', stroke: 'rgba(50,100,45,.5)', 'stroke-width': .8 }, g);
+    };
+    [-44, 44].forEach(sepal);
+    svgEl('path', { d: 'M-9 -44 L0 -76 L9 -44 Z', fill: '#F0BE2C', transform: 'translate(0 26)' }, P.bud);
+    [-22, 22, 0].forEach(sepal);
+
+    // Flor (se balancea/respira)
+    P.tilt = svgEl('g', {}, head);
+    const breath = svgEl('g', { class: 'head-breath' }, P.tilt);
+    const layers = [['back', 0, PETAL_BACK, 'gPetalBack', 86], ['front', 180 / PETAL_COUNT, PETAL_FRONT, 'gPetalFront', 76]];
+    layers.forEach(([layer, offset, d, fill, len]) => {
+      const lg = svgEl('g', {}, breath);
+      for (let i = 0; i < PETAL_COUNT; i++) {
+        const angle = (i * 360) / PETAL_COUNT + offset;
+        const outer = svgEl('g', { transform: `rotate(${angle.toFixed(2)}) translate(0 -30)` }, lg);
+        const grow = svgEl('g', { style: HIDDEN }, outer);
+        svgEl('path', { d, fill: `url(#${fill})`, stroke: 'rgba(150,90,0,.3)', 'stroke-width': .8 }, grow);
+        svgEl('path', { d: `M0 -6 C 1 -${len * .3} -1 -${len * .55} 0 -${len * .74}`, fill: 'none', stroke: 'rgba(140,80,0,.28)', 'stroke-width': 1, 'stroke-linecap': 'round' }, grow);
+        P.petals[layer].push(grow);
+      }
+    });
+
+    // Centro con semillas en espiral (ángulo áureo)
+    P.disc = svgEl('g', { style: HIDDEN }, breath);
+    svgEl('circle', { r: 46, fill: '#D69A18' }, P.disc);
+    svgEl('circle', { r: 41, fill: 'url(#gDisc)' }, P.disc);
+    for (let i = 1; i <= 170; i++) {
+      const r = 3.0 * Math.sqrt(i);
+      if (r > 37.5) break;
+      const a = i * 2.39996;
+      svgEl('circle', {
+        cx: (r * Math.cos(a)).toFixed(2), cy: (r * Math.sin(a)).toFixed(2), r: (1 + (r / 38) * 1.3).toFixed(2),
+        fill: i % 3 === 0 ? '#E8B84A' : '#1E1108', 'fill-opacity': i % 3 === 0 ? .55 : .5
+      }, P.disc);
+    }
+    svgEl('circle', { r: 41, fill: 'none', stroke: '#B67A22', 'stroke-width': 2 }, P.disc);
+
+    /* --- Suelo, raíces, semilla y brote (por encima del tallo: lo cubren en la base) --- */
+    let d = 'M20 548';
+    for (let x = 20; x <= 380; x += 6) d += ` L${x} ${this.gy(x).toFixed(1)}`;
+    d += ' L380 548 Z';
+    P.ground = svgEl('g', { style: HIDDEN }, S);
+    svgEl('path', { d, fill: 'url(#gSoil)' }, P.ground);
+    let top = ''; for (let x = 20; x <= 380; x += 6) top += `${x === 20 ? 'M' : 'L'}${x} ${this.gy(x).toFixed(1)} `;
+    svgEl('path', { d: top, fill: 'none', stroke: 'rgba(255,238,196,.35)', 'stroke-width': 1.6, 'stroke-linecap': 'round' }, P.ground);
+
+    ['M200 493 C 198 506 190 516 178 526', 'M200 493 C 202 508 210 518 224 528', 'M200 493 C 200 510 199 522 197 538',
+     'M189 512 C 181 514 173 512 167 508', 'M211 514 C 219 514 227 512 233 507'].forEach(dd => {
+      P.roots.push(svgEl('path', {
+        d: dd, fill: 'none', stroke: '#EBD9AE', 'stroke-width': 1.6, 'stroke-linecap': 'round',
+        pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1, style: HIDDEN
+      }, S));
+    });
+
+    P.halo = svgEl('circle', { cx: 200, cy: 480, r: 46, fill: 'url(#gHalo)', style: HIDDEN }, S);
+    const seedPos = svgEl('g', { transform: 'translate(200 481)' }, S);
+    P.seed = svgEl('g', { style: HIDDEN }, seedPos);
+    const seedShape = svgEl('g', { transform: 'rotate(16) scale(1.9)' }, P.seed);
+    svgEl('path', { d: 'M0 -13 C 8.5 -6 9 7 0 13 C -9 7 -8.5 -6 0 -13 Z', fill: '#3A2B24' }, seedShape);
+    svgEl('path', { d: 'M-2.6 -8 C -4.6 -2 -4.6 4 -2 9', fill: 'none', stroke: '#E6DAC6', 'stroke-width': 1.2, 'stroke-linecap': 'round' }, seedShape);
+    svgEl('path', { d: 'M2.6 -8 C 4.6 -2 4.6 4 2 9', fill: 'none', stroke: '#E6DAC6', 'stroke-width': 1.2, 'stroke-linecap': 'round' }, seedShape);
+
+    // Brote inicial (tallito + dos cotiledones)
+    const sproutPos = svgEl('g', { transform: 'translate(200 486)' }, S);
+    P.sprout = svgEl('g', { style: HIDDEN }, sproutPos);
+    P.sproutStem = svgEl('path', {
+      d: 'M0 4 C 0 -6 1.5 -18 0 -30', fill: 'none', stroke: '#7FB05F', 'stroke-width': 4, 'stroke-linecap': 'round',
+      pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-dashoffset': 1
+    }, P.sprout);
+    [['scale(1)'], ['scale(-1 1)']].forEach(([tf]) => {
+      const o = svgEl('g', { transform: `translate(0 -30) ${tf}` }, P.sprout);
+      const grow = svgEl('g', { style: HIDDEN }, o);
+      svgEl('path', { d: 'M0 0 C -8 -9 -22 -9 -27 0 C -21 9 -8 9 0 0 Z', fill: '#8DBB68', stroke: 'rgba(60,110,50,.35)', 'stroke-width': .7 }, grow);
+      P.cots.push(grow);
+    });
+  },
+
+  /* ---- Acciones del cierre: el girasol se deshace en orden 🌻 → 🌼 → 🍃 → 🌱 → ✨ ---- */
+
+  /** Los pétalos de una capa se desprenden y caen flotando. */
+  async dropPetals(layer) {
+    const list = this.p.petals[layer];
+    for (const grow of list) {
+      const c = Fx.center(grow);
+      Fx.petalFall(c.x, c.y);
+      play(grow, [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.7)' }], { duration: 800, easing: 'ease-in' });
+      if (!isReduced()) await wait(95);
+    }
+    await wait(isReduced() ? 500 : 800);
+  },
+
+  /** El centro de la flor se recoge y desaparece. */
+  async hideHead() {
+    await play(this.p.disc, [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.55)' }], { duration: 1300, easing: 'ease-in-out' });
+  },
+
+  /** Hojas, compañeras y tallo se recogen hacia el suelo; queda un brote. */
+  async retract() {
+    const P = this.p, jobs = [];
+    P.leaves.forEach((lf, i) => jobs.push(play(lf.grow,
+      [{ opacity: 1, transform: 'scale(1) rotate(0deg)' }, { opacity: 0, transform: 'scale(0) rotate(10deg)' }],
+      { duration: 1300, delay: i * 250, easing: 'ease-in' })));
+    P.sprouts.forEach((s, i) => {
+      jobs.push(play(s.stem, this.retractFrames(), { duration: 1400, delay: i * 150, easing: 'ease-in-out' }));
+      s.leaves.forEach(lf => jobs.push(play(lf.grow,
+        [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(0)' }], { duration: 800, easing: 'ease-in' })));
+    });
+    jobs.push(play(P.stem,   this.retractFrames(), { duration: 2600, delay: 500, easing: 'ease-in-out' }));
+    jobs.push(play(P.stemHi, this.retractFrames(.6), { duration: 2600, delay: 500, easing: 'ease-in-out' }));
+    await Promise.all(jobs);
+    await play(P.sprout, [{ opacity: 0, transform: 'scale(.3)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 1000 });
+  },
+  retractFrames(op = 1) {
+    return [
+      { opacity: op, strokeDasharray: '1 1' },
+      { opacity: op, strokeDasharray: '0.001 1', offset: .95 },
+      { opacity: 0, strokeDasharray: '0.001 1' }
+    ];
+  },
+
+  /** El brote se convierte en destellos y la escena se despeja. */
+  async dissolve() {
+    const P = this.p;
+    Fx.atEl(P.sprout, 34, 22);
+    setTimeout(() => Fx.atEl(P.sprout, 22, 34), 500);
+    const fade = (n, d, delay = 0) => play(n, [{ opacity: 1 }, { opacity: 0 }], { duration: d, delay, easing: 'ease-in-out' });
+    fade(P.sprout, 1500);
+    fade(P.ground, 2200);
+    P.roots.forEach(r => fade(r, 1500));
+    $('#experience').classList.add('is-dissolved');
+    await wait(isReduced() ? 900 : 2400);
+  }
+};
+
+/* =====================================================================
+   8 · TEXTOS DE LA ESCENA (etiqueta de etapa + frase)
+   ===================================================================== */
+const Caption = {
+  label: null, text: null,
+
+  async swapNode(node, txt, asWord) {
+    node.classList.remove('is-in');
+    if (node.textContent) await wait(isReduced() ? 0 : 450);
+    node.textContent = txt || '';
+    node.classList.toggle('is-word', !!asWord);
+    node.classList.toggle('is-emoji', node === this.label && !!txt && !/\p{L}/u.test(txt));
+    void node.offsetWidth;
+    if (txt) node.classList.add('is-in');
+  },
+
+  /** set('🌱 Semilla', 'texto', {word:true}) — pasa null para no tocar ese elemento. */
+  set(label, text, opts = {}) {
+    const jobs = [];
+    if (label !== null && label !== undefined) {
+      jobs.push(this.swapNode(this.label, label, false));
+      if (label && Plant.svg) {
+        Plant.svg.setAttribute('aria-label', 'Girasol en crecimiento: ' + label.replace(/^[^\p{L}]+/u, ''));
+      }
+    }
+    if (text !== null && text !== undefined) jobs.push(this.swapNode(this.text, text, opts.word));
+    return Promise.all(jobs);
+  },
+  clear() { return this.set('', ''); }
+};
+
+/* =====================================================================
+   9 · MOMENTO FINAL: líneas que aparecen una a una
+   ===================================================================== */
+const Final = {
+  box: null,
+
+  async clear() {
+    if (!this.box.childNodes.length) return;
+    this.box.classList.add('is-out');
+    await wait(isReduced() ? 0 : 650);
+    this.box.replaceChildren();
+    this.box.classList.remove('is-out');
+  },
+
+  /** Muestra una línea; "delay" es la pausa antes de la siguiente. */
+  async line(text, cls = '', delay = 1000) {
+    const p = h('p', `fl ${cls}`.trim(), text);
+    this.box.append(p);
+    void p.offsetWidth;
+    p.classList.add('is-in');
+    await wait(delay);
+    return p;
+  },
+
+  /** Un "beat" = una pantalla de texto: [{text, cls, delay}], se mantiene "hold" ms. */
+  async beat(lines, hold = 2000, keep = false) {
+    if (!keep) await this.clear();
+    for (const l of lines) await this.line(l.text, l.cls, l.delay);
+    await wait(hold);
+  }
+};
+
+/* =====================================================================
+   10 · HISTORIA: semilla → tallo → hojas → botón → pétalos → girasol → final → cierre
+   ===================================================================== */
+const Story = {
+  exp: null,
+
+  async run() {
+    try {
+      this.exp = $('#experience');
+      this.exp.classList.remove('is-final', 'is-dissolved', 'is-farewell', 'is-lit');
+      Plant.build();
+      await Caption.clear();
+      await Final.clear();
+      await wait(1300);                 // deja que la pantalla se asiente
+
+      await this.seed();
+      await this.stem();
+      await this.leaves();
+      await this.bud();
+      await this.petals();
+      await this.complete();
+      await this.finale();
+    } catch (err) {
+      console.error('Error en la experiencia:', err);
+    }
+  },
+
+  /* ETAPA 1 · Semilla ------------------------------------------------- */
+  async seed() {
+    const P = Plant.p;
+    Caption.set('🌱 Semilla', 'Todo lo que florece comienza con algo pequeño.');
+    await Promise.all([
+      play(P.ground, [{ opacity: 0 }, { opacity: 1 }], { duration: 1400, easing: 'ease' }),
+      play(P.field,  [{ opacity: 0 }, { opacity: 1 }], { duration: 2800, delay: 300, easing: 'ease' }),
+      play(P.halo,   [{ opacity: 0 }, { opacity: 1 }], { duration: 2200, delay: 700, easing: 'ease' }),
+      play(P.seed, [
+        { opacity: 0, transform: 'translateY(-150px) scale(1,1)' },
+        { opacity: 1, transform: 'translateY(5px) scale(1,1)', offset: .75 },
+        { opacity: 1, transform: 'translateY(0px) scale(1,1)' }
+      ], { duration: 1800, delay: 700, easing: 'cubic-bezier(.3,.6,.4,1)' })
+    ]);
+    await wait(2800);
+
+    // La semilla germina: se ensancha, salen raíces y asoma el brote
+    const wiggle = play(P.seed, [
+      { opacity: 1, transform: 'translateY(0px) scale(1,1)' },
+      { opacity: 1, transform: 'translateY(0px) scale(1.12,.9)', offset: .35 },
+      { opacity: 1, transform: 'translateY(0px) scale(1.02,1.05)', offset: .7 },
+      { opacity: 1, transform: 'translateY(0px) scale(1,1)' }
+    ], { duration: 1400, easing: 'ease-in-out' });
+    P.roots.forEach((r, i) => play(r, [{ opacity: 0, strokeDashoffset: 1 }, { opacity: .9, strokeDashoffset: 0 }],
+      { duration: 1400, delay: 300 + i * 160, easing: 'ease-out' }));
+    await wiggle;
+    await play(P.sprout, [{ opacity: 0 }, { opacity: 1 }], { duration: 300 });
+    play(P.sproutStem, [{ opacity: 1, strokeDashoffset: 1 }, { opacity: 1, strokeDashoffset: 0 }], { duration: 1100, easing: 'ease-out' });
+    P.cots.forEach((c, i) => play(c, [
+      { opacity: 0, transform: 'scale(0)' }, { opacity: 1, transform: 'scale(1.1)', offset: .7 }, { opacity: 1, transform: 'scale(1)' }
+    ], { duration: 900, delay: 800 + i * 160, easing: 'ease-out' }));
+    await wait(2300);
+  },
+
+  /* ETAPA 2 · Tallo --------------------------------------------------- */
+  async stem() {
+    const P = Plant.p;
+    Caption.set('🌿 Tallo', 'Cada esfuerzo cuenta.');
+    play(P.seed,   [{ opacity: 1, transform: 'translateY(0px) scale(1,1)' }, { opacity: 0, transform: 'translateY(0px) scale(.6,.6)' }], { duration: 1600, delay: 600, easing: 'ease-in' });
+    play(P.halo,   [{ opacity: 1 }, { opacity: 0 }], { duration: 1600, delay: 400 });
+    play(P.sprout, [{ opacity: 1 }, { opacity: 0 }], { duration: 1400, delay: 1400 });
+    const grow = op => [
+      { opacity: 0,  strokeDashoffset: 1 },
+      { opacity: op, strokeDashoffset: .97, offset: .04 },
+      { opacity: op, strokeDashoffset: 0 }
+    ];
+    await Promise.all([
+      play(P.stem,   grow(1),   { duration: 4600, delay: 500, easing: 'cubic-bezier(.45,.05,.35,1)' }),
+      play(P.stemHi, grow(.75), { duration: 4600, delay: 500, easing: 'cubic-bezier(.45,.05,.35,1)' })
+    ]);
+    await wait(1300);
+  },
+
+  /* ETAPA 3 · Hojas --------------------------------------------------- */
+  async leaves() {
+    const P = Plant.p;
+    Caption.set('🍃 Hojas', 'Cada día aprendemos, compartimos y crecemos.');
+    for (let i = 0; i < P.leaves.length; i++) {
+      const lf = P.leaves[i];
+      await play(lf.grow, [
+        { opacity: 0, transform: 'scale(0) rotate(14deg)' },
+        { opacity: 1, transform: 'scale(1.06) rotate(-2deg)', offset: .7 },
+        { opacity: 1, transform: 'scale(1) rotate(0deg)' }
+      ], { duration: 1800, easing: 'cubic-bezier(.3,.7,.3,1)' });
+      Fx.atEl(lf.grow, 4, 30);
+      await wait(i === 0 ? 800 : 1900);
+    }
+  },
+
+  /* ETAPA 4 · Botón floral + plantas compañeras ------------------------ */
+  async bud() {
+    const P = Plant.p;
+    Caption.set('🌻 Botón floral', 'También crecemos gracias a las personas que caminan a nuestro lado.');
+    const jobs = P.sprouts.map((s, i) => {
+      const d = 500 + i * 420;
+      return Promise.all([
+        play(s.stem, [{ opacity: 0, strokeDashoffset: 1 }, { opacity: 1, strokeDashoffset: .96, offset: .05 }, { opacity: 1, strokeDashoffset: 0 }],
+          { duration: 1500, delay: d, easing: 'ease-out' }),
+        ...s.leaves.map((lf, j) => play(lf.grow, [{ opacity: 0, transform: 'scale(0)' }, { opacity: 1, transform: 'scale(1)' }],
+          { duration: 900, delay: d + 1100 + j * 120, easing: 'cubic-bezier(.3,1.4,.5,1)' }))
+      ]);
+    });
+    jobs.push(play(P.bud, [
+      { opacity: 0, transform: 'scale(0)' }, { opacity: 1, transform: 'scale(1.08)', offset: .75 }, { opacity: 1, transform: 'scale(1)' }
+    ], { duration: 2200, delay: 300, easing: 'cubic-bezier(.3,.7,.3,1)' }));
+    await Promise.all(jobs);
+    P.sprouts.forEach((s, i) => setTimeout(() => Fx.atEl(s.leaves[0].grow, 2, 10), i * 250));
+    Fx.atEl(P.bud, 6, 22);
+    await wait(3400);
+  },
+
+  /* ETAPA 5 · Pétalos, uno por uno ------------------------------------- */
+  async petals() {
+    const P = Plant.p;
+    await Caption.set('🌻 Pétalos', '');
+    // El botón se abre y aparece el centro de la flor
+    await Promise.all([
+      play(P.bud,  [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(1.6)' }], { duration: 1200, easing: 'ease-in' }),
+      play(P.disc, [{ opacity: 0, transform: 'scale(.2)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 1500, delay: 300 })
+    ]);
+    Fx.atEl(P.disc, 8, 26);
+    await wait(500);
+
+    const perWord = PETAL_COUNT * 2 / PETAL_WORDS.length;      // 4 pétalos por palabra
+    for (let w = 0; w < PETAL_WORDS.length; w++) {
+      Caption.set(null, PETAL_WORDS[w], { word: true });
+      for (let s = 0; s < perWord / 2; s++) {
+        const i = w * (perWord / 2) + s;
+        [P.petals.back[i], P.petals.front[i]].forEach((pt, k) => {
+          play(pt, PETAL_FRAMES, { duration: 900, delay: k * 140, easing: 'cubic-bezier(.3,.7,.3,1)' });
+          setTimeout(() => Fx.atEl(pt, 3, 16), isReduced() ? 0 : 520 + k * 140);
+        });
+        if (!isReduced()) await wait(660);
+      }
+      await wait(isReduced() ? 1700 : 300);
+    }
+    await wait(900);
+  },
+
+  /* ETAPA 6 · Girasol completo ----------------------------------------- */
+  async complete() {
+    const P = Plant.p;
+    Plant.svg.classList.add('alive');          // viento suave, respiración y hojas que se mecen
+    await Caption.set('🌻 Girasol completo', '');
+    Fx.ring(P.head, 30);
+    Fx.startGlow();
+    await wait(1600);
+
+    // "busca la luz": aparece un resplandor y la flor se inclina hacia él
+    this.exp.classList.add('is-lit');
+    play(P.tilt, [{ opacity: 1, transform: 'rotate(0deg)' }, { opacity: 1, transform: 'rotate(6deg)' }], { duration: 3600, easing: 'ease-in-out' });
+    await Caption.set(null, 'Así como un girasol busca la luz…');
+    await wait(4000);
+    await Caption.set(null, 'Nosotros también podemos elegir seguir creciendo.');
+    await wait(4300);
+    await Caption.set(null, `🌻 Sigue floreciendo, ${State.name}.`, { word: true });
+    await wait(4000);
+  },
+
+  /* MOMENTO FINAL ------------------------------------------------------ */
+  async finale() {
+    const intent = findIntent(State.intent);
+    const read = txt => clamp(1400 + txt.length * 40, 2400, 9000);
+
+    await Caption.clear();
+    this.exp.classList.add('is-final');        // el girasol se aleja y deja espacio al mensaje
+    await wait(isReduced() ? 500 : 1900);
+
+    // 🌻 NOMBRE · El momento es tuyo
+    await Final.beat([
+      { text: '🌻', cls: 'fl--emoji', delay: 900 },
+      { text: State.name, cls: 'fl--name', delay: 1200 },
+      { text: 'El momento es tuyo.', cls: 'fl--lead', delay: 0 }
+    ], 2600);
+
+    // Mensaje personal
+    await Final.beat([
+      { text: `${intent.icon} Hoy elegiste regalarte ${intent.gift}.`, cls: 'fl--tag', delay: 1400 },
+      { text: `“${State.message}”`, cls: 'fl--quote', delay: 0 }
+    ], clamp(2800 + State.message.length * 32, 4500, 10000));
+
+    // Mensaje según la intención elegida
+    const dynamic = intent.msg(State.name);
+    await Final.beat([{ text: dynamic, cls: 'fl--lead', delay: 0 }], read(dynamic));
+
+    // Recuerda…
+    await Final.beat([
+      { text: 'Recuerda…', cls: 'fl--lead', delay: 1500 },
+      { text: 'Tu esfuerzo importa.', cls: 'fl--lead', delay: 1700 },
+      { text: 'Lo que haces cada día deja huella.', cls: 'fl--lead', delay: 2000 },
+      { text: 'Y siempre hay espacio para seguir floreciendo.', cls: 'fl--lead', delay: 0 }
+    ], 2400);
+
+    // Compañerismo (siempre, sin importar la intención elegida)
+    await Final.beat([
+      { text: '🤝', cls: 'fl--emoji fl--emoji-sm', delay: 900 },
+      { text: 'Porque crecer también significa reconocer a quienes comparten nuestro camino.', cls: 'fl--lead', delay: 3400 },
+      { text: 'Que nunca nos falten motivos para seguir floreciendo juntos.', cls: 'fl--lead', delay: 0 }
+    ], 3800);
+
+    // Identidad merinense (discreta)
+    await Final.beat([
+      { text: 'Una experiencia de compañerismo para nuestra familia merinense.', cls: 'fl--lead', delay: 1700 },
+      { text: 'I.E. N.° 00499 “Alfonso Merino Silva”', cls: 'fl--school', delay: 1300 },
+      { text: '“Más que un colegio, una familia.”', cls: 'fl--motto', delay: 1500 },
+      { text: '🌻 #SomosMerinenses', cls: 'fl--hash', delay: 1300 },
+      { text: '🌻 “Una experiencia especial por el Día de las Flores Amarillas.”', cls: 'fl--small', delay: 0 }
+    ], 2800);
+
+    // Gracias + botón de cierre
+    await Final.clear();
+    await Final.line(`Gracias, ${State.name}, por regalarte este momento.`, 'fl--lead', 1300);
+    const btn = h('button', 'btn btn--primary fl', '💛 Cerrar mi momento');
+    btn.type = 'button';
+    btn.id = 'btnClose';
+    Final.box.append(btn);
+    void btn.offsetWidth;
+    btn.classList.add('is-in');
+    btn.focus({ preventScroll: true });
+    btn.addEventListener('click', () => this.close(btn), { once: true });
+  },
+
+  /* CIERRE: 🌻 → 🌼 → 🍃 → 🌱 → ✨ → pantalla limpia ---------------------- */
+  async close(btn) {
+    if (State.closing) return;
+    State.closing = true;
+    btn.disabled = true;
+    try {
+      Fx.stopGlow();
+      await Final.clear();
+      this.exp.classList.remove('is-final', 'is-lit');   // el girasol vuelve a ocupar la pantalla
+      await Caption.set('🌻', '');
+      await wait(isReduced() ? 900 : 2100);
+
+      await Caption.set('🌼', '');
+      await Plant.dropPetals('front');                   // caen los pétalos exteriores
+
+      await Caption.set('🍃', '');
+      await Plant.dropPetals('back');
+      await Plant.hideHead();
+      await wait(600);
+
+      await Caption.set('🌱', '');
+      await Plant.retract();                             // el tallo se recoge, queda un brote
+      await wait(500);
+
+      await Caption.set('✨', '');
+      await Plant.dissolve();                            // el brote se vuelve destellos
+      await Caption.clear();
+
+      this.exp.classList.add('is-farewell');             // pantalla limpia
+      await wait(isReduced() ? 500 : 1500);
+
+      await Final.clear();
+      await Final.line('Este momento termina aquí…', 'fl--lead', 2800);
+      Meadow.showFarewell();                             // el campo de girasoles florece
+      await Final.line('Pero lo que sembraste en ti puede seguir floreciendo.', 'fl--lead', 0);
+      await wait(4600);
+
+      await Final.clear();
+      await Final.line(`Hasta pronto, ${State.name}. 🌻`, 'fl--name', 1500);
+      await wait(3500);
+
+      const again = h('button', 'btn btn--primary fl', '🌻 Volver al inicio');
+      again.type = 'button';
+      again.id = 'btnRestart';
+      Final.box.append(again);
+      void again.offsetWidth;
+      again.classList.add('is-in');
+      again.addEventListener('click', () => App.restart());
+      again.focus({ preventScroll: true });
+    } catch (err) {
+      console.error('Error en el cierre:', err);
+    }
+  }
+};
+
+/* =====================================================================
+   10b · CAMPO DE GIRASOLES DEL INICIO (interactivo)
+   - Se mecen con el viento y "buscan la luz": las cabezas miran hacia tu dedo / cursor.
+     Si no hay puntero, siguen a un sol virtual que cruza el cielo.
+   - Al pasar el puntero rápido las rozas y se sacuden; al tocar uno, florece con destellos.
+   - Tocar un espacio libre del campo siembra un girasol nuevo.
+   ===================================================================== */
+const Meadow = {
+  SCREENS: ['welcome', 'name', 'intent', 'message', 'ready'],     // pantallas donde se ve el campo
+  svg: null, W: 0, H: 0, u: 40, seed: 1,
+  flowers: [], planted: [], gPlanted: null,
+  active: false, raf: 0, last: 0,
+  ptr: { x: 0, y: 0, vx: 0, vy: 0, t: -1e9 },
+
+  init() {
+    this.svg = $('#meadowSvg');
+    this.layer = $('#meadow');
+    this.seed = 1 + Math.floor(Math.random() * 9000);
+    // El campo responde en todo el recorrido (inicio → preparación) y en la despedida
+    this.SCREENS.map(id => $(`[data-screen="${id}"]`)).concat($('#experience')).forEach(screen => {
+      screen.addEventListener('pointermove', e => this.onMove(e));
+      screen.addEventListener('pointerdown', e => this.onDown(e));
+    });
+    window.addEventListener('resize', () => {
+      clearTimeout(this.resizeTimer);
+      this.resizeTimer = setTimeout(() => {
+        // Solo reconstruye si cambió de verdad el tamaño (no por la barra del navegador del celular)
+        if (Math.abs(window.innerWidth - this.W) > 2 || Math.abs(window.innerHeight - this.H) > 140) this.build(false);
+      }, 300);
+    });
+    this.build(true);
+  },
+
+  /** Dibuja todo el campo: 3 filas con profundidad (lejos → cerca) + columnas laterales en pantallas anchas. */
+  build(animateIn) {
+    const S = this.svg;
+    S.replaceChildren();
+    this.flowers = []; this.planted = [];
+    const W = this.W = window.innerWidth, H = this.H = window.innerHeight;
+    const u = this.u = clamp(Math.min(W, H) / 9, 34, 78);
+    S.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+    const defs = svgEl('defs', {}, S);
+    addGradient(defs, 'linearGradient', 'gWelBack',  { x1: 0, y1: 1, x2: 0, y2: 0 }, [[0, '#EFAF08'], [1, '#F7CA30']]);
+    addGradient(defs, 'linearGradient', 'gWelFront', { x1: 0, y1: 1, x2: 0, y2: 0 }, [[0, '#F7C420'], [.6, '#FBD53F'], [1, '#FFEB7E']]);
+    addGradient(defs, 'radialGradient', 'gWelDisc',  { cx: .5, cy: .5, r: .5 }, [[0, '#7A4B1B'], [1, '#38220F']]);
+    addGradient(defs, 'linearGradient', 'gWelLeaf',  { x1: 0, y1: 0, x2: -124, y2: 0, gradientUnits: 'userSpaceOnUse' }, [[0, '#7DB863'], [1, '#428A3B']]);
+    addGradient(defs, 'linearGradient', 'gWelHaze',  { x1: 0, y1: H * .8, x2: 0, y2: H, gradientUnits: 'userSpaceOnUse' }, [[0, '#B3D18A', 0], [1, '#A2C878', .8]]);
+    defineHead(defs, 'welHead', { back: 'gWelBack', front: 'gWelFront', disc: 'gWelDisc' });
+
+    // Generador con semilla: el campo es armonioso y no "salta" al redimensionar
+    let sd = this.seed;
+    const rnd = () => { sd = (sd * 16807) % 2147483647; return sd / 2147483647; };
+
+    const gA = svgEl('g', {}, S), gB = svgEl('g', {}, S);
+    svgEl('rect', { x: 0, y: H * .8, width: W, height: H * .2 + 2, fill: 'url(#gWelHaze)' }, S);   // bruma verde al pie
+    const gC = svgEl('g', {}, S);
+    this.gPlanted = svgEl('g', {}, S);
+
+    const rows = [
+      { g: gA, step: u * 1.35, r: [.42, .56], head: [.13, .33], base: .93, a: .5,  wave: 0 },   // fila lejana, alta
+      { g: gA, step: u * 1.5, r: [.5, .68],  head: [.34, .52], base: .93, a: .66, wave: 0 },
+      { g: gB, step: u * 1.9, r: [.8, 1.0],  head: [.56, .72], base: .99, a: .88, wave: 1 },
+      { g: gC, step: u * 2.4, r: [1.15, 1.5], head: [.76, .92], base: 1.05, a: 1,  wave: 2 }
+    ];
+    rows.forEach(row => {
+      for (let x = -row.step * .3; x < W + row.step * .4; x += row.step * (.85 + rnd() * .3)) {
+        this.addFlower(row.g, {
+          x, r: u * (row.r[0] + rnd() * (row.r[1] - row.r[0])),
+          headY: H * (row.head[0] + rnd() * (row.head[1] - row.head[0])),
+          base: H * row.base + rnd() * 10, a: row.a,
+          delay: 450 + (x / W) * 900 + row.wave * 260, rnd
+        }, animateIn);
+      }
+    });
+    // Columnas altas a los lados cuando hay espacio libre junto al texto
+    if (W >= 900) {
+      [[.02, .2], [.8, .98]].forEach(([lo, hi]) => {
+        for (let i = 0; i < 3; i++) {
+          this.addFlower(gC, {
+            x: W * (lo + rnd() * (hi - lo)), r: u * (.9 + rnd() * .35),
+            headY: H * (.16 + rnd() * .36), base: H * 1.04, a: .95, delay: 900 + i * 220, rnd
+          }, animateIn);
+        }
+      });
+    }
+  },
+
+  /** Crea un girasol completo. Capas: entrada → viento (CSS) → inclinación del tallo (JS) → mirada (JS) → cabeceo (CSS). */
+  addFlower(parent, o, animateIn) {
+    const rnd = o.rnd || Math.random;
+    const L = Math.max(40, o.base - o.headY), s = o.r / 94;
+    const outer = svgEl('g', { transform: `translate(${o.x.toFixed(1)} ${o.base.toFixed(1)})`, opacity: o.a }, parent);
+    if (o.soil) svgEl('ellipse', { cx: 0, cy: 3, rx: o.r * .42, ry: o.r * .1, fill: 'rgba(110,80,45,.32)' }, outer);
+    const grow = svgEl('g', { style: animateIn ? 'opacity:0' : '' }, outer);
+    const sway = svgEl('g', { class: 'bg-sway' }, grow);
+    sway.style.animationDelay = `${(-(o.x / 110)).toFixed(2)}s`;                 // ola de viento que cruza el campo
+    const push = svgEl('g', {}, sway);
+
+    const lean = (rnd() - .5) * 10;
+    svgEl('path', {
+      d: `M0 0 C ${lean.toFixed(1)} ${(-L * .35).toFixed(1)} ${(-lean).toFixed(1)} ${(-L * .7).toFixed(1)} 0 ${(-L).toFixed(1)}`,
+      fill: 'none', stroke: '#6AA256', 'stroke-width': (3 + o.r * .1).toFixed(1), 'stroke-linecap': 'round'
+    }, push);
+    const k = (o.r / 125).toFixed(3), side = rnd() < .5 ? 1 : -1;
+    [[.34, side, 1], [.6, -side, .78]].forEach(([at, sd, sc]) => {
+      svgEl('path', {
+        d: LEAF, fill: 'url(#gWelLeaf)',
+        transform: `translate(0 ${(-L * at).toFixed(1)}) rotate(${sd === 1 ? -8 : 6}) scale(${(sd === 1 ? -k : k) * sc} ${k * sc})`
+      }, push);
+    });
+
+    const hg = svgEl('g', { transform: `translate(0 ${(-L).toFixed(1)})` }, push);
+    const look = svgEl('g', {}, hg);
+    const pulse = svgEl('g', {}, look);
+    const nod = svgEl('g', { class: 'bg-nod' }, pulse);
+    nod.style.animationDelay = `${(-rnd() * 4).toFixed(2)}s`;
+    const use = svgEl('use', { href: '#welHead', transform: `scale(${s.toFixed(3)})` }, nod);
+    use.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '#welHead');
+
+    const f = {
+      x: o.x, headY: o.headY, r: o.r, outer, grow, push, look, pulse,
+      lookS: { a: 0, v: 0 }, leanS: { a: 0, v: 0 }, _la: 0, _pa: 0, tSpark: 0, tFlick: 0
+    };
+    this.flowers.push(f);
+    if (animateIn) {
+      play(grow, [
+        { opacity: 0, transform: 'scale(0)' },
+        { opacity: 1, transform: 'scale(1.07)', offset: .72 },
+        { opacity: 1, transform: 'scale(1)' }
+      ], { duration: 1500, delay: o.delay || 0, easing: 'cubic-bezier(.3,.7,.3,1)' });
+    }
+    return f;
+  },
+
+  /** En la despedida el campo florece justo cuando se habla de lo que sembraste. */
+  showFarewell() {
+    this.seed = 1 + Math.floor(Math.random() * 9000);
+    this.build(true);
+    this.setActive(true);
+  },
+
+  setActive(on) {
+    this.active = on;
+    if (this.layer) this.layer.classList.toggle('is-on', on);
+    if (on && !this.raf && !isReduced()) {
+      this.last = performance.now();
+      this.raf = requestAnimationFrame(t => this.frame(t));
+    }
+  },
+
+  onMove(e) {
+    if (!this.active) return;
+    const now = performance.now(), p = this.ptr, dt = Math.max(.008, (now - p.t) / 1000);
+    if (dt < .5) { p.vx = p.vx * .6 + ((e.clientX - p.x) / dt) * .4; p.vy = p.vy * .6 + ((e.clientY - p.y) / dt) * .4; }
+    p.x = e.clientX; p.y = e.clientY; p.t = now;
+  },
+
+  onDown(e) {
+    if (!this.active || isReduced()) return;
+    if (e.target.closest && e.target.closest('button, a, input, textarea, label')) return;
+    this.onMove(e);
+    const x = e.clientX, y = e.clientY;
+    let hit = null, best = Infinity;
+    for (const f of this.flowers) {
+      const d = Math.hypot(x - f.x, y - f.headY);
+      if (d < f.r * 1.05 && d < best) { best = d; hit = f; }
+    }
+    if (hit) this.cheer(hit);
+    else if (!(e.target.closest && e.target.closest('.screen__inner, .final-box'))) this.plant(x, y);
+  },
+
+  /** Un girasol tocado se sacude, "late" y suelta destellos y pétalos. */
+  cheer(f) {
+    const dir = f.x < this.ptr.x ? 1 : -1;
+    f.lookS.v += dir * 320; f.leanS.v += dir * 90;
+    play(f.pulse, [{ opacity: 1, transform: 'scale(1)' }, { opacity: 1, transform: 'scale(1.2)', offset: .35 }, { opacity: 1, transform: 'scale(1)' }],
+      { duration: 650, easing: 'ease-out' });
+    Fx.sparks(f.x, f.headY, 16, f.r * .7);
+    for (let i = 0; i < 5; i++) Fx.petalFall(f.x + rand(-f.r * .6, f.r * .6), f.headY + rand(-f.r * .3, f.r * .3));
+  },
+
+  /** Siembra un girasol nuevo donde tocaste. Máximo 14: el más antiguo se despide. */
+  plant(x, y) {
+    const u = this.u, L = Math.min(y - 70, u * rand(1.7, 2.7));
+    if (L < 50) return;
+    const f = this.addFlower(this.gPlanted, { x, r: u * rand(.7, 1.0), headY: y - L, base: y, a: 1, soil: true, delay: 0 }, true);
+    this.planted.push(f);
+    Fx.sparks(x, y - 4, 8, 14);
+    setTimeout(() => Fx.sparks(x, y - L, 10, u * .5), isReduced() ? 0 : 900);
+    if (this.planted.length > 14) {
+      const old = this.planted.shift();
+      this.flowers.splice(this.flowers.indexOf(old), 1);
+      play(old.outer, [{ opacity: 1 }, { opacity: 0 }], { duration: 700 }).then(() => old.outer.remove());
+    }
+  },
+
+  /** Muelle amortiguado: movimiento suave y natural con pequeño rebote. */
+  spring(st, target, dt) {
+    st.v += (55 * (target - st.a) - 8 * st.v) * dt;
+    st.a += st.v * dt;
+  },
+
+  frame(now) {
+    this.raf = 0;
+    if (!this.active || isReduced()) return;
+    const dt = Math.min(.033, (now - this.last) / 1000 || .016);
+    this.last = now;
+    const p = this.ptr, idle = now - p.t > 2500;
+    p.vx *= .92; p.vy *= .92;
+
+    // A dónde miran: al puntero, o a un sol virtual que cruza el cielo
+    let px, py;
+    if (idle) { px = this.W * (.5 + .46 * Math.sin(now / 1000 * .32)); py = this.H * .08; }
+    else { px = p.x; py = p.y; }
+    const speed = Math.hypot(p.vx, p.vy);
+
+    for (const f of this.flowers) {
+      const dx = px - f.x;
+      // Roce: si el puntero pasa rápido cerca de la cabeza, la sacude y destella
+      if (!idle && Math.hypot(px - f.x, py - f.headY) < f.r * 1.25) {
+        if (speed > 220 && now - f.tFlick > 450) { f.lookS.v += clamp(p.vx * .12, -260, 260); f.tFlick = now; }
+        if (now - f.tSpark > 1800) { f.tSpark = now; Fx.sparks(f.x, f.headY, 3, f.r * .5); }
+      }
+      this.spring(f.lookS, clamp(dx / (this.W * .35), -1, 1) * 26, dt);
+      this.spring(f.leanS, clamp(dx / (this.W * .6), -1, 1) * 4.5, dt);
+      if (Math.abs(f.lookS.a - f._la) > .05) { f._la = f.lookS.a; f.look.setAttribute('transform', `rotate(${f._la.toFixed(2)})`); }
+      if (Math.abs(f.leanS.a - f._pa) > .03) { f._pa = f.leanS.a; f.push.setAttribute('transform', `rotate(${f._pa.toFixed(2)})`); }
+    }
+    this.raf = requestAnimationFrame(t => this.frame(t));
+  }
+};
+
+/* =====================================================================
+   11 · APLICACIÓN: arranque y reinicio
+   ===================================================================== */
+const App = {
+  init() {
+    Caption.label = $('#stageLabel');
+    Caption.text  = $('#caption');
+    Final.box     = $('#finalBox');
+    Fx.init();
+    Music.init_ui();
+    Music.autoStart();                     // la música debe sonar desde que se abre
+    Forms.init();
+    Meadow.init();
+    Nav.go('welcome');
+  },
+
+  /** Deja todo limpio para que otra persona (o la misma) viva un nuevo momento. Nada se guarda. */
+  restart() {
+    if (this.restarting) return;
+    this.restarting = true;
+    Nav.go('welcome');                     // primero vuelve al inicio, pase lo que pase
+    Music.autoStart();                     // la música sigue (o se activa) al volver
+    try {
+      Fx.stopGlow();
+      Fx.clear();
+      Forms.reset();
+      Meadow.seed = 1 + Math.floor(Math.random() * 9000);
+      Meadow.build(true);                  // el campo vuelve a florecer
+    } catch (err) {
+      console.error('Error al reiniciar:', err);
+    }
+    setTimeout(() => {
+      try {
+        const exp = $('#experience');
+        exp.classList.remove('is-final', 'is-dissolved', 'is-farewell', 'is-lit');
+        Final.box.replaceChildren();
+        Caption.label.textContent = ''; Caption.text.textContent = '';
+        Caption.label.classList.remove('is-in', 'is-emoji'); Caption.text.classList.remove('is-in', 'is-word');
+        Plant.svg.replaceChildren();
+      } catch (err) {
+        console.error('Error al limpiar la escena:', err);
+      }
+      this.restarting = false;
+    }, 1500);
+  }
+};
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => App.init());
+else App.init();
+
+})();
+</script>
+</body>
+</html>
